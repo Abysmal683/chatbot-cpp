@@ -1,47 +1,31 @@
 {
-    "configurations": [
+    "version": "2.0.0",
+    "tasks": [
         {
-            "name": "Windows (UCRT64)",
-            "compilerPath": "C:/msys64/ucrt64/bin/g++.exe",  // Ruta a g++ en UCRT64 de MSYS2
-            "includePath": [
-                "${workspaceFolder}/**",
-                "C:/msys64/ucrt64/include",  // Ruta de los headers de UCRT64
-                "C:/msys64/mingw64/include"  // Incluir mingw64 por si necesitas headers específicos
-            ],
-            "defines": [],
-            "intelliSenseMode": "gcc-x64",  // Usamos gcc-x64 para UCRT64
-            "cStandard": "c11",
-            "cppStandard": "c++17",
-            "browse": {
-                "path": [
-                    "${workspaceFolder}/**",
-                    "C:/msys64/ucrt64/include",  // Ruta de los headers de UCRT64
-                    "C:/msys64/mingw64/include"  // Incluir mingw64 por si necesitas headers específicos
-                ],
-                "limitSymbolsToIncludedHeaders": true
-            }
+            "label": "CMake Configure",
+            "type": "shell",
+            "command": "cmake -S . -B build",
+            "options": {
+                "env": {
+                    "PATH": "C:/msys64/ucrt64/bin;${env:PATH}"
+                }
+            },
+            "problemMatcher": []
         },
         {
-            "name": "Linux",
-            "compilerPath": "/usr/bin/g++",  // Ruta del compilador en Linux
-            "includePath": [
-                "${workspaceFolder}/**",
-                "/usr/include",  // Directorio estándar de cabeceras en Linux
-                "/usr/local/include"
-            ],
-            "defines": [],
-            "intelliSenseMode": "gcc-x64",  // Usamos gcc-x64 para Linux también
-            "cStandard": "c11",
-            "cppStandard": "c++17",
-            "browse": {
-                "path": [
-                    "${workspaceFolder}/**",
-                    "/usr/include",  // Directorio estándar de cabeceras en Linux
-                    "/usr/local/include"
-                ],
-                "limitSymbolsToIncludedHeaders": true
-            }
+            "label": "CMake Build",
+            "type": "shell",
+            "command": "cmake --build build --config Debug",
+            "options": {
+                "env": {
+                    "PATH": "C:/msys64/ucrt64/bin;${env:PATH}"
+                }
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
         }
-    ],
-    "version": "2.0.0"
+    ]
 }

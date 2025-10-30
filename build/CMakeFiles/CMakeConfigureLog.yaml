@@ -1,0 +1,1149 @@
+
+---
+events:
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CMakeDetermineSystem.cmake:12 (find_program)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_UNAME"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "uname"
+    candidate_directories:
+      - "/ucrt64/bin/"
+      - "/usr/local/bin/"
+      - "/usr/bin/"
+      - "/bin/"
+      - "/c/Windows/System32/"
+      - "/c/Windows/"
+      - "/c/Windows/System32/Wbem/"
+      - "/c/Windows/System32/WindowsPowerShell/v1.0/"
+      - "/usr/bin/site_perl/"
+      - "/usr/bin/vendor_perl/"
+      - "/usr/bin/core_perl/"
+    searched_directories:
+      - "/ucrt64/bin/uname.com"
+      - "/ucrt64/bin/uname.exe"
+      - "/ucrt64/bin/uname"
+      - "/usr/local/bin/uname.com"
+      - "/usr/local/bin/uname.exe"
+      - "/usr/local/bin/uname"
+      - "/usr/bin/uname.com"
+    found: "/usr/bin/uname.exe"
+    search_context:
+      ENV{PATH}:
+        - "/ucrt64/bin"
+        - "/usr/local/bin"
+        - "/usr/bin"
+        - "/bin"
+        - "/c/Windows/System32"
+        - "/c/Windows"
+        - "/c/Windows/System32/Wbem"
+        - "/c/Windows/System32/WindowsPowerShell/v1.0/"
+        - "/usr/bin/site_perl"
+        - "/usr/bin/vendor_perl"
+        - "/usr/bin/core_perl"
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CMakeDetermineSystem.cmake:212 (message)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      The system is: MSYS - 3.6.5-0eeda3e1.x86_64 - x86_64
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CMakeNinjaFindMake.cmake:5 (find_program)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_MAKE_PROGRAM"
+    description: "Program used to build from build.ninja files."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "ninja-build"
+      - "ninja"
+      - "samu"
+    candidate_directories:
+      - "/ucrt64/bin/"
+      - "/usr/local/bin/"
+      - "/usr/bin/"
+      - "/bin/"
+      - "/c/Windows/System32/"
+      - "/c/Windows/"
+      - "/c/Windows/System32/Wbem/"
+      - "/c/Windows/System32/WindowsPowerShell/v1.0/"
+      - "/usr/bin/site_perl/"
+      - "/usr/bin/vendor_perl/"
+      - "/usr/bin/core_perl/"
+    searched_directories:
+      - "/ucrt64/bin/ninja-build.com"
+      - "/ucrt64/bin/ninja-build.exe"
+      - "/ucrt64/bin/ninja-build"
+      - "/ucrt64/bin/ninja.com"
+    found: "/ucrt64/bin/ninja.exe"
+    search_context:
+      ENV{PATH}:
+        - "/ucrt64/bin"
+        - "/usr/local/bin"
+        - "/usr/bin"
+        - "/bin"
+        - "/c/Windows/System32"
+        - "/c/Windows"
+        - "/c/Windows/System32/Wbem"
+        - "/c/Windows/System32/WindowsPowerShell/v1.0/"
+        - "/usr/bin/site_perl"
+        - "/usr/bin/vendor_perl"
+        - "/usr/bin/core_perl"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CMakeDetermineCompilerId.cmake:462 (find_file)"
+      - "/usr/share/cmake/Modules/CMakeDetermineCompilerId.cmake:500 (CMAKE_DETERMINE_COMPILER_ID_WRITE)"
+      - "/usr/share/cmake/Modules/CMakeDetermineCompilerId.cmake:8 (CMAKE_DETERMINE_COMPILER_ID_BUILD)"
+      - "/usr/share/cmake/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "/usr/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake:125 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "file"
+    variable: "src_in"
+    description: "Path to a file."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "CMakeCXXCompilerId.cpp.in"
+    candidate_directories:
+      - "/usr/share/cmake/Modules/"
+    found: "/usr/share/cmake/Modules/CMakeCXXCompilerId.cpp.in"
+    search_context:
+      ENV{PATH}:
+        - "/ucrt64/bin"
+        - "/usr/local/bin"
+        - "/usr/bin"
+        - "/bin"
+        - "/c/Windows/System32"
+        - "/c/Windows"
+        - "/c/Windows/System32/Wbem"
+        - "/c/Windows/System32/WindowsPowerShell/v1.0/"
+        - "/usr/bin/site_perl"
+        - "/usr/bin/vendor_perl"
+        - "/usr/bin/core_perl"
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "/usr/share/cmake/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "/usr/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake:125 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+      Compiler: /ucrt64/bin/g++.exe 
+      Build flags: 
+      Id flags:  
+      
+      The output was:
+      0
+      
+      
+      Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "a.exe"
+      
+      The CXX compiler identification is GNU, found in:
+        /home/Robótica/Proyectos/chatbot-cpp/build/CMakeFiles/4.1.2/CompilerIdCXX/a.exe
+      
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CMakeFindBinUtils.cmake:238 (find_program)"
+      - "/usr/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake:206 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_AR"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "ar"
+    candidate_directories:
+      - "/ucrt64/bin/"
+      - "/usr/local/bin/"
+      - "/usr/bin/"
+      - "/bin/"
+      - "/c/Windows/System32/"
+      - "/c/Windows/"
+      - "/c/Windows/System32/Wbem/"
+      - "/c/Windows/System32/WindowsPowerShell/v1.0/"
+      - "/usr/bin/site_perl/"
+      - "/usr/bin/vendor_perl/"
+      - "/usr/bin/core_perl/"
+    searched_directories:
+      - "/ucrt64/bin/ar.com"
+    found: "/ucrt64/bin/ar.exe"
+    search_context:
+      ENV{PATH}:
+        - "/ucrt64/bin"
+        - "/usr/local/bin"
+        - "/usr/bin"
+        - "/bin"
+        - "/c/Windows/System32"
+        - "/c/Windows"
+        - "/c/Windows/System32/Wbem"
+        - "/c/Windows/System32/WindowsPowerShell/v1.0/"
+        - "/usr/bin/site_perl"
+        - "/usr/bin/vendor_perl"
+        - "/usr/bin/core_perl"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CMakeFindBinUtils.cmake:238 (find_program)"
+      - "/usr/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake:206 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_RANLIB"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "ranlib"
+    candidate_directories:
+      - "/ucrt64/bin/"
+      - "/usr/local/bin/"
+      - "/usr/bin/"
+      - "/bin/"
+      - "/c/Windows/System32/"
+      - "/c/Windows/"
+      - "/c/Windows/System32/Wbem/"
+      - "/c/Windows/System32/WindowsPowerShell/v1.0/"
+      - "/usr/bin/site_perl/"
+      - "/usr/bin/vendor_perl/"
+      - "/usr/bin/core_perl/"
+    searched_directories:
+      - "/ucrt64/bin/ranlib.com"
+    found: "/ucrt64/bin/ranlib.exe"
+    search_context:
+      ENV{PATH}:
+        - "/ucrt64/bin"
+        - "/usr/local/bin"
+        - "/usr/bin"
+        - "/bin"
+        - "/c/Windows/System32"
+        - "/c/Windows"
+        - "/c/Windows/System32/Wbem"
+        - "/c/Windows/System32/WindowsPowerShell/v1.0/"
+        - "/usr/bin/site_perl"
+        - "/usr/bin/vendor_perl"
+        - "/usr/bin/core_perl"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CMakeFindBinUtils.cmake:238 (find_program)"
+      - "/usr/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake:206 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_STRIP"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "strip"
+    candidate_directories:
+      - "/ucrt64/bin/"
+      - "/usr/local/bin/"
+      - "/usr/bin/"
+      - "/bin/"
+      - "/c/Windows/System32/"
+      - "/c/Windows/"
+      - "/c/Windows/System32/Wbem/"
+      - "/c/Windows/System32/WindowsPowerShell/v1.0/"
+      - "/usr/bin/site_perl/"
+      - "/usr/bin/vendor_perl/"
+      - "/usr/bin/core_perl/"
+    searched_directories:
+      - "/ucrt64/bin/strip.com"
+    found: "/ucrt64/bin/strip.exe"
+    search_context:
+      ENV{PATH}:
+        - "/ucrt64/bin"
+        - "/usr/local/bin"
+        - "/usr/bin"
+        - "/bin"
+        - "/c/Windows/System32"
+        - "/c/Windows"
+        - "/c/Windows/System32/Wbem"
+        - "/c/Windows/System32/WindowsPowerShell/v1.0/"
+        - "/usr/bin/site_perl"
+        - "/usr/bin/vendor_perl"
+        - "/usr/bin/core_perl"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CMakeFindBinUtils.cmake:238 (find_program)"
+      - "/usr/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake:206 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_LINKER"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "ld"
+    candidate_directories:
+      - "/ucrt64/bin/"
+      - "/usr/local/bin/"
+      - "/usr/bin/"
+      - "/bin/"
+      - "/c/Windows/System32/"
+      - "/c/Windows/"
+      - "/c/Windows/System32/Wbem/"
+      - "/c/Windows/System32/WindowsPowerShell/v1.0/"
+      - "/usr/bin/site_perl/"
+      - "/usr/bin/vendor_perl/"
+      - "/usr/bin/core_perl/"
+    searched_directories:
+      - "/ucrt64/bin/ld.com"
+    found: "/ucrt64/bin/ld.exe"
+    search_context:
+      ENV{PATH}:
+        - "/ucrt64/bin"
+        - "/usr/local/bin"
+        - "/usr/bin"
+        - "/bin"
+        - "/c/Windows/System32"
+        - "/c/Windows"
+        - "/c/Windows/System32/Wbem"
+        - "/c/Windows/System32/WindowsPowerShell/v1.0/"
+        - "/usr/bin/site_perl"
+        - "/usr/bin/vendor_perl"
+        - "/usr/bin/core_perl"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CMakeFindBinUtils.cmake:238 (find_program)"
+      - "/usr/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake:206 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_NM"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "nm"
+    candidate_directories:
+      - "/ucrt64/bin/"
+      - "/usr/local/bin/"
+      - "/usr/bin/"
+      - "/bin/"
+      - "/c/Windows/System32/"
+      - "/c/Windows/"
+      - "/c/Windows/System32/Wbem/"
+      - "/c/Windows/System32/WindowsPowerShell/v1.0/"
+      - "/usr/bin/site_perl/"
+      - "/usr/bin/vendor_perl/"
+      - "/usr/bin/core_perl/"
+    searched_directories:
+      - "/ucrt64/bin/nm.com"
+    found: "/ucrt64/bin/nm.exe"
+    search_context:
+      ENV{PATH}:
+        - "/ucrt64/bin"
+        - "/usr/local/bin"
+        - "/usr/bin"
+        - "/bin"
+        - "/c/Windows/System32"
+        - "/c/Windows"
+        - "/c/Windows/System32/Wbem"
+        - "/c/Windows/System32/WindowsPowerShell/v1.0/"
+        - "/usr/bin/site_perl"
+        - "/usr/bin/vendor_perl"
+        - "/usr/bin/core_perl"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CMakeFindBinUtils.cmake:238 (find_program)"
+      - "/usr/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake:206 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_OBJDUMP"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "objdump"
+    candidate_directories:
+      - "/ucrt64/bin/"
+      - "/usr/local/bin/"
+      - "/usr/bin/"
+      - "/bin/"
+      - "/c/Windows/System32/"
+      - "/c/Windows/"
+      - "/c/Windows/System32/Wbem/"
+      - "/c/Windows/System32/WindowsPowerShell/v1.0/"
+      - "/usr/bin/site_perl/"
+      - "/usr/bin/vendor_perl/"
+      - "/usr/bin/core_perl/"
+    searched_directories:
+      - "/ucrt64/bin/objdump.com"
+    found: "/ucrt64/bin/objdump.exe"
+    search_context:
+      ENV{PATH}:
+        - "/ucrt64/bin"
+        - "/usr/local/bin"
+        - "/usr/bin"
+        - "/bin"
+        - "/c/Windows/System32"
+        - "/c/Windows"
+        - "/c/Windows/System32/Wbem"
+        - "/c/Windows/System32/WindowsPowerShell/v1.0/"
+        - "/usr/bin/site_perl"
+        - "/usr/bin/vendor_perl"
+        - "/usr/bin/core_perl"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CMakeFindBinUtils.cmake:238 (find_program)"
+      - "/usr/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake:206 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_OBJCOPY"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "objcopy"
+    candidate_directories:
+      - "/ucrt64/bin/"
+      - "/usr/local/bin/"
+      - "/usr/bin/"
+      - "/bin/"
+      - "/c/Windows/System32/"
+      - "/c/Windows/"
+      - "/c/Windows/System32/Wbem/"
+      - "/c/Windows/System32/WindowsPowerShell/v1.0/"
+      - "/usr/bin/site_perl/"
+      - "/usr/bin/vendor_perl/"
+      - "/usr/bin/core_perl/"
+    searched_directories:
+      - "/ucrt64/bin/objcopy.com"
+    found: "/ucrt64/bin/objcopy.exe"
+    search_context:
+      ENV{PATH}:
+        - "/ucrt64/bin"
+        - "/usr/local/bin"
+        - "/usr/bin"
+        - "/bin"
+        - "/c/Windows/System32"
+        - "/c/Windows"
+        - "/c/Windows/System32/Wbem"
+        - "/c/Windows/System32/WindowsPowerShell/v1.0/"
+        - "/usr/bin/site_perl"
+        - "/usr/bin/vendor_perl"
+        - "/usr/bin/core_perl"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CMakeFindBinUtils.cmake:238 (find_program)"
+      - "/usr/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake:206 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_READELF"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "readelf"
+    candidate_directories:
+      - "/ucrt64/bin/"
+      - "/usr/local/bin/"
+      - "/usr/bin/"
+      - "/bin/"
+      - "/c/Windows/System32/"
+      - "/c/Windows/"
+      - "/c/Windows/System32/Wbem/"
+      - "/c/Windows/System32/WindowsPowerShell/v1.0/"
+      - "/usr/bin/site_perl/"
+      - "/usr/bin/vendor_perl/"
+      - "/usr/bin/core_perl/"
+    searched_directories:
+      - "/ucrt64/bin/readelf.com"
+    found: "/ucrt64/bin/readelf.exe"
+    search_context:
+      ENV{PATH}:
+        - "/ucrt64/bin"
+        - "/usr/local/bin"
+        - "/usr/bin"
+        - "/bin"
+        - "/c/Windows/System32"
+        - "/c/Windows"
+        - "/c/Windows/System32/Wbem"
+        - "/c/Windows/System32/WindowsPowerShell/v1.0/"
+        - "/usr/bin/site_perl"
+        - "/usr/bin/vendor_perl"
+        - "/usr/bin/core_perl"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CMakeFindBinUtils.cmake:238 (find_program)"
+      - "/usr/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake:206 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_DLLTOOL"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "dlltool"
+    candidate_directories:
+      - "/ucrt64/bin/"
+      - "/usr/local/bin/"
+      - "/usr/bin/"
+      - "/bin/"
+      - "/c/Windows/System32/"
+      - "/c/Windows/"
+      - "/c/Windows/System32/Wbem/"
+      - "/c/Windows/System32/WindowsPowerShell/v1.0/"
+      - "/usr/bin/site_perl/"
+      - "/usr/bin/vendor_perl/"
+      - "/usr/bin/core_perl/"
+    searched_directories:
+      - "/ucrt64/bin/dlltool.com"
+    found: "/ucrt64/bin/dlltool.exe"
+    search_context:
+      ENV{PATH}:
+        - "/ucrt64/bin"
+        - "/usr/local/bin"
+        - "/usr/bin"
+        - "/bin"
+        - "/c/Windows/System32"
+        - "/c/Windows"
+        - "/c/Windows/System32/Wbem"
+        - "/c/Windows/System32/WindowsPowerShell/v1.0/"
+        - "/usr/bin/site_perl"
+        - "/usr/bin/vendor_perl"
+        - "/usr/bin/core_perl"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CMakeFindBinUtils.cmake:238 (find_program)"
+      - "/usr/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake:206 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_ADDR2LINE"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "addr2line"
+    candidate_directories:
+      - "/ucrt64/bin/"
+      - "/usr/local/bin/"
+      - "/usr/bin/"
+      - "/bin/"
+      - "/c/Windows/System32/"
+      - "/c/Windows/"
+      - "/c/Windows/System32/Wbem/"
+      - "/c/Windows/System32/WindowsPowerShell/v1.0/"
+      - "/usr/bin/site_perl/"
+      - "/usr/bin/vendor_perl/"
+      - "/usr/bin/core_perl/"
+    searched_directories:
+      - "/ucrt64/bin/addr2line.com"
+    found: "/ucrt64/bin/addr2line.exe"
+    search_context:
+      ENV{PATH}:
+        - "/ucrt64/bin"
+        - "/usr/local/bin"
+        - "/usr/bin"
+        - "/bin"
+        - "/c/Windows/System32"
+        - "/c/Windows"
+        - "/c/Windows/System32/Wbem"
+        - "/c/Windows/System32/WindowsPowerShell/v1.0/"
+        - "/usr/bin/site_perl"
+        - "/usr/bin/vendor_perl"
+        - "/usr/bin/core_perl"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CMakeFindBinUtils.cmake:238 (find_program)"
+      - "/usr/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake:206 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_TAPI"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "tapi"
+    candidate_directories:
+      - "/ucrt64/bin/"
+      - "/usr/local/bin/"
+      - "/usr/bin/"
+      - "/bin/"
+      - "/c/Windows/System32/"
+      - "/c/Windows/"
+      - "/c/Windows/System32/Wbem/"
+      - "/c/Windows/System32/WindowsPowerShell/v1.0/"
+      - "/usr/bin/site_perl/"
+      - "/usr/bin/vendor_perl/"
+      - "/usr/bin/core_perl/"
+    searched_directories:
+      - "/ucrt64/bin/tapi.com"
+      - "/ucrt64/bin/tapi.exe"
+      - "/ucrt64/bin/tapi"
+      - "/usr/local/bin/tapi.com"
+      - "/usr/local/bin/tapi.exe"
+      - "/usr/local/bin/tapi"
+      - "/usr/bin/tapi.com"
+      - "/usr/bin/tapi.exe"
+      - "/usr/bin/tapi"
+      - "/bin/tapi.com"
+      - "/bin/tapi.exe"
+      - "/bin/tapi"
+      - "/c/Windows/System32/tapi.com"
+      - "/c/Windows/System32/tapi.exe"
+      - "/c/Windows/System32/tapi"
+      - "/c/Windows/tapi.com"
+      - "/c/Windows/tapi.exe"
+      - "/c/Windows/tapi"
+      - "/c/Windows/System32/Wbem/tapi.com"
+      - "/c/Windows/System32/Wbem/tapi.exe"
+      - "/c/Windows/System32/Wbem/tapi"
+      - "/c/Windows/System32/WindowsPowerShell/v1.0/tapi.com"
+      - "/c/Windows/System32/WindowsPowerShell/v1.0/tapi.exe"
+      - "/c/Windows/System32/WindowsPowerShell/v1.0/tapi"
+      - "/usr/bin/site_perl/tapi.com"
+      - "/usr/bin/site_perl/tapi.exe"
+      - "/usr/bin/site_perl/tapi"
+      - "/usr/bin/vendor_perl/tapi.com"
+      - "/usr/bin/vendor_perl/tapi.exe"
+      - "/usr/bin/vendor_perl/tapi"
+      - "/usr/bin/core_perl/tapi.com"
+      - "/usr/bin/core_perl/tapi.exe"
+      - "/usr/bin/core_perl/tapi"
+    found: false
+    search_context:
+      ENV{PATH}:
+        - "/ucrt64/bin"
+        - "/usr/local/bin"
+        - "/usr/bin"
+        - "/bin"
+        - "/c/Windows/System32"
+        - "/c/Windows"
+        - "/c/Windows/System32/Wbem"
+        - "/c/Windows/System32/WindowsPowerShell/v1.0/"
+        - "/usr/bin/site_perl"
+        - "/usr/bin/vendor_perl"
+        - "/usr/bin/core_perl"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/Compiler/GNU-FindBinUtils.cmake:18 (find_program)"
+      - "/usr/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake:207 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_CXX_COMPILER_AR"
+    description: "A wrapper around 'ar' adding the appropriate '--plugin' option for the GCC compiler"
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "gcc-ar-15.2"
+      - "gcc-ar-15"
+      - "gcc-ar15"
+      - "gcc-ar"
+    candidate_directories:
+      - "/ucrt64/bin/"
+      - "/usr/local/bin/"
+      - "/usr/bin/"
+      - "/bin/"
+      - "/c/Windows/System32/"
+      - "/c/Windows/"
+      - "/c/Windows/System32/Wbem/"
+      - "/c/Windows/System32/WindowsPowerShell/v1.0/"
+      - "/usr/bin/site_perl/"
+      - "/usr/bin/vendor_perl/"
+      - "/usr/bin/core_perl/"
+    searched_directories:
+      - "/ucrt64/bin/gcc-ar-15.2.com"
+      - "/ucrt64/bin/gcc-ar-15.2.exe"
+      - "/ucrt64/bin/gcc-ar-15.2"
+      - "/usr/local/bin/gcc-ar-15.2.com"
+      - "/usr/local/bin/gcc-ar-15.2.exe"
+      - "/usr/local/bin/gcc-ar-15.2"
+      - "/usr/bin/gcc-ar-15.2.com"
+      - "/usr/bin/gcc-ar-15.2.exe"
+      - "/usr/bin/gcc-ar-15.2"
+      - "/bin/gcc-ar-15.2.com"
+      - "/bin/gcc-ar-15.2.exe"
+      - "/bin/gcc-ar-15.2"
+      - "/c/Windows/System32/gcc-ar-15.2.com"
+      - "/c/Windows/System32/gcc-ar-15.2.exe"
+      - "/c/Windows/System32/gcc-ar-15.2"
+      - "/c/Windows/gcc-ar-15.2.com"
+      - "/c/Windows/gcc-ar-15.2.exe"
+      - "/c/Windows/gcc-ar-15.2"
+      - "/c/Windows/System32/Wbem/gcc-ar-15.2.com"
+      - "/c/Windows/System32/Wbem/gcc-ar-15.2.exe"
+      - "/c/Windows/System32/Wbem/gcc-ar-15.2"
+      - "/c/Windows/System32/WindowsPowerShell/v1.0/gcc-ar-15.2.com"
+      - "/c/Windows/System32/WindowsPowerShell/v1.0/gcc-ar-15.2.exe"
+      - "/c/Windows/System32/WindowsPowerShell/v1.0/gcc-ar-15.2"
+      - "/usr/bin/site_perl/gcc-ar-15.2.com"
+      - "/usr/bin/site_perl/gcc-ar-15.2.exe"
+      - "/usr/bin/site_perl/gcc-ar-15.2"
+      - "/usr/bin/vendor_perl/gcc-ar-15.2.com"
+      - "/usr/bin/vendor_perl/gcc-ar-15.2.exe"
+      - "/usr/bin/vendor_perl/gcc-ar-15.2"
+      - "/usr/bin/core_perl/gcc-ar-15.2.com"
+      - "/usr/bin/core_perl/gcc-ar-15.2.exe"
+      - "/usr/bin/core_perl/gcc-ar-15.2"
+      - "/ucrt64/bin/gcc-ar-15.com"
+      - "/ucrt64/bin/gcc-ar-15.exe"
+      - "/ucrt64/bin/gcc-ar-15"
+      - "/usr/local/bin/gcc-ar-15.com"
+      - "/usr/local/bin/gcc-ar-15.exe"
+      - "/usr/local/bin/gcc-ar-15"
+      - "/usr/bin/gcc-ar-15.com"
+      - "/usr/bin/gcc-ar-15.exe"
+      - "/usr/bin/gcc-ar-15"
+      - "/bin/gcc-ar-15.com"
+      - "/bin/gcc-ar-15.exe"
+      - "/bin/gcc-ar-15"
+      - "/c/Windows/System32/gcc-ar-15.com"
+      - "/c/Windows/System32/gcc-ar-15.exe"
+      - "/c/Windows/System32/gcc-ar-15"
+      - "/c/Windows/gcc-ar-15.com"
+      - "/c/Windows/gcc-ar-15.exe"
+      - "/c/Windows/gcc-ar-15"
+      - "/c/Windows/System32/Wbem/gcc-ar-15.com"
+      - "/c/Windows/System32/Wbem/gcc-ar-15.exe"
+      - "/c/Windows/System32/Wbem/gcc-ar-15"
+      - "/c/Windows/System32/WindowsPowerShell/v1.0/gcc-ar-15.com"
+      - "/c/Windows/System32/WindowsPowerShell/v1.0/gcc-ar-15.exe"
+      - "/c/Windows/System32/WindowsPowerShell/v1.0/gcc-ar-15"
+      - "/usr/bin/site_perl/gcc-ar-15.com"
+      - "/usr/bin/site_perl/gcc-ar-15.exe"
+      - "/usr/bin/site_perl/gcc-ar-15"
+      - "/usr/bin/vendor_perl/gcc-ar-15.com"
+      - "/usr/bin/vendor_perl/gcc-ar-15.exe"
+      - "/usr/bin/vendor_perl/gcc-ar-15"
+      - "/usr/bin/core_perl/gcc-ar-15.com"
+      - "/usr/bin/core_perl/gcc-ar-15.exe"
+      - "/usr/bin/core_perl/gcc-ar-15"
+      - "/ucrt64/bin/gcc-ar15.com"
+      - "/ucrt64/bin/gcc-ar15.exe"
+      - "/ucrt64/bin/gcc-ar15"
+      - "/usr/local/bin/gcc-ar15.com"
+      - "/usr/local/bin/gcc-ar15.exe"
+      - "/usr/local/bin/gcc-ar15"
+      - "/usr/bin/gcc-ar15.com"
+      - "/usr/bin/gcc-ar15.exe"
+      - "/usr/bin/gcc-ar15"
+      - "/bin/gcc-ar15.com"
+      - "/bin/gcc-ar15.exe"
+      - "/bin/gcc-ar15"
+      - "/c/Windows/System32/gcc-ar15.com"
+      - "/c/Windows/System32/gcc-ar15.exe"
+      - "/c/Windows/System32/gcc-ar15"
+      - "/c/Windows/gcc-ar15.com"
+      - "/c/Windows/gcc-ar15.exe"
+      - "/c/Windows/gcc-ar15"
+      - "/c/Windows/System32/Wbem/gcc-ar15.com"
+      - "/c/Windows/System32/Wbem/gcc-ar15.exe"
+      - "/c/Windows/System32/Wbem/gcc-ar15"
+      - "/c/Windows/System32/WindowsPowerShell/v1.0/gcc-ar15.com"
+      - "/c/Windows/System32/WindowsPowerShell/v1.0/gcc-ar15.exe"
+      - "/c/Windows/System32/WindowsPowerShell/v1.0/gcc-ar15"
+      - "/usr/bin/site_perl/gcc-ar15.com"
+      - "/usr/bin/site_perl/gcc-ar15.exe"
+      - "/usr/bin/site_perl/gcc-ar15"
+      - "/usr/bin/vendor_perl/gcc-ar15.com"
+      - "/usr/bin/vendor_perl/gcc-ar15.exe"
+      - "/usr/bin/vendor_perl/gcc-ar15"
+      - "/usr/bin/core_perl/gcc-ar15.com"
+      - "/usr/bin/core_perl/gcc-ar15.exe"
+      - "/usr/bin/core_perl/gcc-ar15"
+      - "/ucrt64/bin/gcc-ar.com"
+    found: "/ucrt64/bin/gcc-ar.exe"
+    search_context:
+      ENV{PATH}:
+        - "/ucrt64/bin"
+        - "/usr/local/bin"
+        - "/usr/bin"
+        - "/bin"
+        - "/c/Windows/System32"
+        - "/c/Windows"
+        - "/c/Windows/System32/Wbem"
+        - "/c/Windows/System32/WindowsPowerShell/v1.0/"
+        - "/usr/bin/site_perl"
+        - "/usr/bin/vendor_perl"
+        - "/usr/bin/core_perl"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/Compiler/GNU-FindBinUtils.cmake:30 (find_program)"
+      - "/usr/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake:207 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_CXX_COMPILER_RANLIB"
+    description: "A wrapper around 'ranlib' adding the appropriate '--plugin' option for the GCC compiler"
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "gcc-ranlib-15.2"
+      - "gcc-ranlib-15"
+      - "gcc-ranlib15"
+      - "gcc-ranlib"
+    candidate_directories:
+      - "/ucrt64/bin/"
+      - "/usr/local/bin/"
+      - "/usr/bin/"
+      - "/bin/"
+      - "/c/Windows/System32/"
+      - "/c/Windows/"
+      - "/c/Windows/System32/Wbem/"
+      - "/c/Windows/System32/WindowsPowerShell/v1.0/"
+      - "/usr/bin/site_perl/"
+      - "/usr/bin/vendor_perl/"
+      - "/usr/bin/core_perl/"
+    searched_directories:
+      - "/ucrt64/bin/gcc-ranlib-15.2.com"
+      - "/ucrt64/bin/gcc-ranlib-15.2.exe"
+      - "/ucrt64/bin/gcc-ranlib-15.2"
+      - "/usr/local/bin/gcc-ranlib-15.2.com"
+      - "/usr/local/bin/gcc-ranlib-15.2.exe"
+      - "/usr/local/bin/gcc-ranlib-15.2"
+      - "/usr/bin/gcc-ranlib-15.2.com"
+      - "/usr/bin/gcc-ranlib-15.2.exe"
+      - "/usr/bin/gcc-ranlib-15.2"
+      - "/bin/gcc-ranlib-15.2.com"
+      - "/bin/gcc-ranlib-15.2.exe"
+      - "/bin/gcc-ranlib-15.2"
+      - "/c/Windows/System32/gcc-ranlib-15.2.com"
+      - "/c/Windows/System32/gcc-ranlib-15.2.exe"
+      - "/c/Windows/System32/gcc-ranlib-15.2"
+      - "/c/Windows/gcc-ranlib-15.2.com"
+      - "/c/Windows/gcc-ranlib-15.2.exe"
+      - "/c/Windows/gcc-ranlib-15.2"
+      - "/c/Windows/System32/Wbem/gcc-ranlib-15.2.com"
+      - "/c/Windows/System32/Wbem/gcc-ranlib-15.2.exe"
+      - "/c/Windows/System32/Wbem/gcc-ranlib-15.2"
+      - "/c/Windows/System32/WindowsPowerShell/v1.0/gcc-ranlib-15.2.com"
+      - "/c/Windows/System32/WindowsPowerShell/v1.0/gcc-ranlib-15.2.exe"
+      - "/c/Windows/System32/WindowsPowerShell/v1.0/gcc-ranlib-15.2"
+      - "/usr/bin/site_perl/gcc-ranlib-15.2.com"
+      - "/usr/bin/site_perl/gcc-ranlib-15.2.exe"
+      - "/usr/bin/site_perl/gcc-ranlib-15.2"
+      - "/usr/bin/vendor_perl/gcc-ranlib-15.2.com"
+      - "/usr/bin/vendor_perl/gcc-ranlib-15.2.exe"
+      - "/usr/bin/vendor_perl/gcc-ranlib-15.2"
+      - "/usr/bin/core_perl/gcc-ranlib-15.2.com"
+      - "/usr/bin/core_perl/gcc-ranlib-15.2.exe"
+      - "/usr/bin/core_perl/gcc-ranlib-15.2"
+      - "/ucrt64/bin/gcc-ranlib-15.com"
+      - "/ucrt64/bin/gcc-ranlib-15.exe"
+      - "/ucrt64/bin/gcc-ranlib-15"
+      - "/usr/local/bin/gcc-ranlib-15.com"
+      - "/usr/local/bin/gcc-ranlib-15.exe"
+      - "/usr/local/bin/gcc-ranlib-15"
+      - "/usr/bin/gcc-ranlib-15.com"
+      - "/usr/bin/gcc-ranlib-15.exe"
+      - "/usr/bin/gcc-ranlib-15"
+      - "/bin/gcc-ranlib-15.com"
+      - "/bin/gcc-ranlib-15.exe"
+      - "/bin/gcc-ranlib-15"
+      - "/c/Windows/System32/gcc-ranlib-15.com"
+      - "/c/Windows/System32/gcc-ranlib-15.exe"
+      - "/c/Windows/System32/gcc-ranlib-15"
+      - "/c/Windows/gcc-ranlib-15.com"
+      - "/c/Windows/gcc-ranlib-15.exe"
+      - "/c/Windows/gcc-ranlib-15"
+      - "/c/Windows/System32/Wbem/gcc-ranlib-15.com"
+      - "/c/Windows/System32/Wbem/gcc-ranlib-15.exe"
+      - "/c/Windows/System32/Wbem/gcc-ranlib-15"
+      - "/c/Windows/System32/WindowsPowerShell/v1.0/gcc-ranlib-15.com"
+      - "/c/Windows/System32/WindowsPowerShell/v1.0/gcc-ranlib-15.exe"
+      - "/c/Windows/System32/WindowsPowerShell/v1.0/gcc-ranlib-15"
+      - "/usr/bin/site_perl/gcc-ranlib-15.com"
+      - "/usr/bin/site_perl/gcc-ranlib-15.exe"
+      - "/usr/bin/site_perl/gcc-ranlib-15"
+      - "/usr/bin/vendor_perl/gcc-ranlib-15.com"
+      - "/usr/bin/vendor_perl/gcc-ranlib-15.exe"
+      - "/usr/bin/vendor_perl/gcc-ranlib-15"
+      - "/usr/bin/core_perl/gcc-ranlib-15.com"
+      - "/usr/bin/core_perl/gcc-ranlib-15.exe"
+      - "/usr/bin/core_perl/gcc-ranlib-15"
+      - "/ucrt64/bin/gcc-ranlib15.com"
+      - "/ucrt64/bin/gcc-ranlib15.exe"
+      - "/ucrt64/bin/gcc-ranlib15"
+      - "/usr/local/bin/gcc-ranlib15.com"
+      - "/usr/local/bin/gcc-ranlib15.exe"
+      - "/usr/local/bin/gcc-ranlib15"
+      - "/usr/bin/gcc-ranlib15.com"
+      - "/usr/bin/gcc-ranlib15.exe"
+      - "/usr/bin/gcc-ranlib15"
+      - "/bin/gcc-ranlib15.com"
+      - "/bin/gcc-ranlib15.exe"
+      - "/bin/gcc-ranlib15"
+      - "/c/Windows/System32/gcc-ranlib15.com"
+      - "/c/Windows/System32/gcc-ranlib15.exe"
+      - "/c/Windows/System32/gcc-ranlib15"
+      - "/c/Windows/gcc-ranlib15.com"
+      - "/c/Windows/gcc-ranlib15.exe"
+      - "/c/Windows/gcc-ranlib15"
+      - "/c/Windows/System32/Wbem/gcc-ranlib15.com"
+      - "/c/Windows/System32/Wbem/gcc-ranlib15.exe"
+      - "/c/Windows/System32/Wbem/gcc-ranlib15"
+      - "/c/Windows/System32/WindowsPowerShell/v1.0/gcc-ranlib15.com"
+      - "/c/Windows/System32/WindowsPowerShell/v1.0/gcc-ranlib15.exe"
+      - "/c/Windows/System32/WindowsPowerShell/v1.0/gcc-ranlib15"
+      - "/usr/bin/site_perl/gcc-ranlib15.com"
+      - "/usr/bin/site_perl/gcc-ranlib15.exe"
+      - "/usr/bin/site_perl/gcc-ranlib15"
+      - "/usr/bin/vendor_perl/gcc-ranlib15.com"
+      - "/usr/bin/vendor_perl/gcc-ranlib15.exe"
+      - "/usr/bin/vendor_perl/gcc-ranlib15"
+      - "/usr/bin/core_perl/gcc-ranlib15.com"
+      - "/usr/bin/core_perl/gcc-ranlib15.exe"
+      - "/usr/bin/core_perl/gcc-ranlib15"
+      - "/ucrt64/bin/gcc-ranlib.com"
+    found: "/ucrt64/bin/gcc-ranlib.exe"
+    search_context:
+      ENV{PATH}:
+        - "/ucrt64/bin"
+        - "/usr/local/bin"
+        - "/usr/bin"
+        - "/bin"
+        - "/c/Windows/System32"
+        - "/c/Windows"
+        - "/c/Windows/System32/Wbem"
+        - "/c/Windows/System32/WindowsPowerShell/v1.0/"
+        - "/usr/bin/site_perl"
+        - "/usr/bin/vendor_perl"
+        - "/usr/bin/core_perl"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CMakeDetermineRCCompiler.cmake:40 (find_program)"
+      - "/usr/share/cmake/Modules/Platform/CYGWIN-GNU.cmake:57 (enable_language)"
+      - "/usr/share/cmake/Modules/Platform/CYGWIN-GNU-CXX.cmake:2 (__cygwin_compiler_gnu)"
+      - "/usr/share/cmake/Modules/Platform/MSYS-GNU-CXX.cmake:1 (include)"
+      - "/usr/share/cmake/Modules/CMakeCXXInformation.cmake:48 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_RC_COMPILER"
+    description: "RC compiler"
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "windres"
+    candidate_directories:
+      - "/ucrt64/bin/"
+      - "/usr/local/bin/"
+      - "/usr/bin/"
+      - "/bin/"
+      - "/c/Windows/System32/"
+      - "/c/Windows/"
+      - "/c/Windows/System32/Wbem/"
+      - "/c/Windows/System32/WindowsPowerShell/v1.0/"
+      - "/usr/bin/site_perl/"
+      - "/usr/bin/vendor_perl/"
+      - "/usr/bin/core_perl/"
+      - "/usr/local/bin/"
+      - "/usr/local/sbin/"
+      - "/usr/local/"
+      - "/usr/bin/"
+      - "/usr/sbin/"
+      - "/usr/"
+      - "/bin/"
+      - "/sbin/"
+      - "/usr/X11R6/bin/"
+      - "/usr/X11R6/sbin/"
+      - "/usr/X11R6/"
+      - "/usr/pkg/bin/"
+      - "/usr/pkg/sbin/"
+      - "/usr/pkg/"
+      - "/opt/bin/"
+      - "/opt/sbin/"
+      - "/opt/"
+    searched_directories:
+      - "/ucrt64/bin/windres.com"
+    found: "/ucrt64/bin/windres.exe"
+    search_context:
+      ENV{PATH}:
+        - "/ucrt64/bin"
+        - "/usr/local/bin"
+        - "/usr/bin"
+        - "/bin"
+        - "/c/Windows/System32"
+        - "/c/Windows"
+        - "/c/Windows/System32/Wbem"
+        - "/c/Windows/System32/WindowsPowerShell/v1.0/"
+        - "/usr/bin/site_perl"
+        - "/usr/bin/vendor_perl"
+        - "/usr/bin/core_perl"
+      CMAKE_INSTALL_PREFIX: "/usr/local"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/usr/local"
+        - "/usr"
+        - "/"
+        - "/usr"
+        - "/usr/local"
+        - "/usr/X11R6"
+        - "/usr/pkg"
+        - "/opt"
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CMakeDetermineCompilerABI.cmake:83 (try_compile)"
+      - "/usr/share/cmake/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:2 (project)"
+    checks:
+      - "Detecting CXX compiler ABI info"
+    directories:
+      source: "/home/Rob\u00f3tica/Proyectos/chatbot-cpp/build/CMakeFiles/CMakeScratch/TryCompile-1UXsl9"
+      binary: "/home/Rob\u00f3tica/Proyectos/chatbot-cpp/build/CMakeFiles/CMakeScratch/TryCompile-1UXsl9"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_CXX_FLAGS_DEBUG: "-g"
+      CMAKE_CXX_SCAN_FOR_MODULES: "OFF"
+      CMAKE_EXE_LINKER_FLAGS: "-Wl,--enable-auto-import"
+    buildResult:
+      variable: "CMAKE_CXX_ABI_COMPILED"
+      cached: true
+      stdout: |
+        Change Dir: '/home/Robótica/Proyectos/chatbot-cpp/build/CMakeFiles/CMakeScratch/TryCompile-1UXsl9'
+        
+        Run Build Command(s): /ucrt64/bin/ninja.exe -v cmTC_a07cb
+        ninja: error: '/usr/share/cmake/Modules/CMakeCXXCompilerABI.cpp', needed by 'CMakeFiles/cmTC_a07cb.dir/CMakeCXXCompilerABI.cpp.o', missing and no known rule to make it
+        
+      exitCode: 1
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CMakeTestCXXCompiler.cmake:56 (try_compile)"
+      - "CMakeLists.txt:2 (project)"
+    checks:
+      - "Check for working CXX compiler: /ucrt64/bin/g++.exe"
+    directories:
+      source: "/home/Rob\u00f3tica/Proyectos/chatbot-cpp/build/CMakeFiles/CMakeScratch/TryCompile-EXEjdq"
+      binary: "/home/Rob\u00f3tica/Proyectos/chatbot-cpp/build/CMakeFiles/CMakeScratch/TryCompile-EXEjdq"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_CXX_FLAGS_DEBUG: "-g"
+      CMAKE_CXX_SCAN_FOR_MODULES: "OFF"
+      CMAKE_EXE_LINKER_FLAGS: "-Wl,--enable-auto-import"
+    buildResult:
+      variable: "CMAKE_CXX_COMPILER_WORKS"
+      cached: true
+      stdout: |
+        Change Dir: '/home/Robótica/Proyectos/chatbot-cpp/build/CMakeFiles/CMakeScratch/TryCompile-EXEjdq'
+        
+        Run Build Command(s): /ucrt64/bin/ninja.exe -v cmTC_b7c1b
+        ninja: error: '/home/Robótica/Proyectos/chatbot-cpp/build/CMakeFiles/CMakeScratch/TryCompile-EXEjdq/testCXXCompiler.cxx', needed by 'CMakeFiles/cmTC_b7c1b.dir/testCXXCompiler.cxx.o', missing and no known rule to make it
+        
+      exitCode: 1
+...
