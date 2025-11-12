@@ -1,3 +1,0 @@
-C:/msys64/home/Robotica/Proyectos/chatbot-cpp/build/CMakeFiles/ChatBot.dir
-C:/msys64/home/Robotica/Proyectos/chatbot-cpp/build/CMakeFiles/edit_cache.dir
-C:/msys64/home/Robotica/Proyectos/chatbot-cpp/build/CMakeFiles/rebuild_cache.dir
