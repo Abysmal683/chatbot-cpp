@@ -1,10 +1,10 @@
 file(REMOVE_RECURSE
   "CMakeFiles/ChatBot.dir/src/main.cpp.obj"
   "CMakeFiles/ChatBot.dir/src/main.cpp.obj.d"
-  "ChatBot.exe"
-  "ChatBot.exe.manifest"
-  "ChatBot.pdb"
-  "libChatBot.dll.a"
+  "bin/ChatBot.exe"
+  "bin/ChatBot.exe.manifest"
+  "bin/ChatBot.pdb"
+  "lib/libChatBot.dll.a"
 )
 
 # Per-language clean rules from dependency scanning.

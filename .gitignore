@@ -1,3 +1,7 @@
+#carpetas
+build/
+bin/
+lib/
 # Prerequisites
 *.d
 

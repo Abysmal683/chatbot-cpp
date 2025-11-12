@@ -11,10 +11,15 @@ include_directories(include)
 # Buscar automáticamente todos los .cpp dentro de src/
 file(GLOB_RECURSE SOURCES src/*.cpp)
 
-# Crear el ejecutable ChatBot
-add_executable(ChatBot ${SOURCES})
-
 # Directorios de salida
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+
+# Crear las carpetas si no existen
+file(MAKE_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+file(MAKE_DIRECTORY ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY})
+file(MAKE_DIRECTORY ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
+
+# Crear el ejecutable ChatBot
+add_executable(${CMAKE_PROJECT_NAME} ${SOURCES})
