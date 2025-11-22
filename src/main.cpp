@@ -1,10 +1,18 @@
-#include <iostream>
-
-int main(int argc, char **argv)
+#include <QApplication>
+//#include "mainwindow.h"
+int main(int argc, char *argv[])
 {
-	std::cout<<"prueba dentro de visual, escriba un caracter y enter";
-	char t;
-	std::cin>>t;
-	return 0;
+    QApplication app(argc, argv);
+    /*if(!DatabaseManager::instance().initialize()){
+        qCritical() << "No se pudo iniciar la base de datos.";
+        return 1;
+    }*/
+    /*MainWindow mainWindow;
+    mainWindow.setWindowTitle("Inventario de Autos");
+    mainWindow.resize(600,400);
+    mainWindow.show();*/
+    main window(this);
+    window.resize(600,400);
+    return window.exec();
 }
 
