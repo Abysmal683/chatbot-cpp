@@ -1,5 +1,5 @@
 <RCC>
-    <qresource lang="es" prefix="/resources">
+    <qresource prefix="/resources">
         <file>imagen/logo-Sistemas.png</file>
         <file>imagen/logo-utp.png</file>
         <file>imagen/logo-utp-fondo.png</file>

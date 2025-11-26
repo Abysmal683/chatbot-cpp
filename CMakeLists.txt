@@ -9,11 +9,11 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 # Arch Linux: Qt tools están en /usr/lib/qt6/bin
-set(QT_HOST_PATH "/usr/lib/qt6")
-set(ENV{PATH} "$ENV{PATH}:/usr/lib/qt6/bin")
+#set(QT_HOST_PATH "/usr/lib/qt6")
+#set(ENV{PATH} "$ENV{PATH}:/usr/lib/qt6/bin")
 # Habilita soporte para Qt (ajusta la versión que tengas instalada)
-find_package(QT NAMES Qt6 REQUIRED COMPONENTS
-Widgets LinguistTools)
+#find_package(QT NAMES Qt6 REQUIRED COMPONENTS
+#Widgets LinguistTools)
 find_package(Qt6 REQUIRED COMPONENTS
     Core
     Gui
@@ -31,11 +31,6 @@ set(TS_DIR ${CMAKE_SOURCE_DIR}/translations)
 set(CMAKE_AUTOUIC_SEARCH_PATHS
     ${UI_DIR}
 )
-#qt creator usara esto para agrupar archivos por carpetas
-source_group("Sources Files" FILES ${SRC_FILES})
-source_group("Header Files" FILES ${HDR_FILES})
-source_group("UI Files" FILES ${UI_FILES})
-source_group("Resources Files" FILES ${RES_FILES})
 #archivos explicitamente incluidos
 set(SRC_FILES
 ${SRC_DIR}/main.cpp
@@ -43,12 +38,26 @@ ${SRC_DIR}/mainwindow.cpp
 ${SRC_DIR}/welcomewidget.cpp
 ${SRC_DIR}/gamelibrarywidget.cpp
 ${SRC_DIR}/chatwidget.cpp
+${SRC_DIR}/database/gamedatabase.cpp
+${SRC_DIR}/ai/aiengine.cpp
+${SRC_DIR}/ai/keyworddectector.cpp
+${SRC_DIR}/ai/tfindfclassifier.cpp
+${SRC_DIR}/ai/ruleengine.cpp
+${SRC_DIR}/ai/recomendationengine.cpp
+${SRC_DIR}/ai/intentclassifier.cpp
 )
 set(HDR_FILES
 ${INCLUDE_DIR}/mainwindow.h
 ${INCLUDE_DIR}/welcomewidget.h
 ${INCLUDE_DIR}/gamelibrarywidget.h
 ${INCLUDE_DIR}/chatwidget.h
+${INCLUDE_DIR}/database/gamedatabase.h
+${INCLUDE_DIR}/ai/aiengine.h
+${INCLUDE_DIR}/ai/keyworddectector.h
+${INCLUDE_DIR}/ai/tfindfclassifier.h
+${INCLUDE_DIR}/ai/ruleengine.h
+${INCLUDE_DIR}/ai/recomendationengine.h
+${INCLUDE_DIR}/ai/intentclassifier.h
 )
 set(UI_FILES
 ${UI_DIR}/mainwindow.ui
@@ -61,18 +70,26 @@ ${RES_DIR}/resources.qrc
 )
 set(TS_FILES
 ${TS_DIR}/ChatBot_es_PA.ts)
+# agregar recursos
+#qt_add_resources(${SRC_FILES} ${RES_FILES})
+#qt creator usara esto para agrupar archivos por carpetas
+source_group("Sources Files" FILES ${SRC_FILES})
+source_group("Includes Files" FILES ${HDR_FILES})
+source_group("UI Files" FILES ${UI_FILES})
+source_group("Resources Files" FILES ${RES_FILES})
+source_group("Translation Files" FILES ${TS_FILES})
+#recursos
+qt_add_resources(resources ${RES_FILES})
+
 #target u objectivo principal
 qt_add_executable(${PROJECT_NAME}
 ${SRC_FILES}
 ${HDR_FILES}
 ${UI_FILES}
-${RES_FILES}
 )
-# traducciones
-##qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
-qt_add_translations(${PROJECT_NAME} TS_FILES ${TS_FILES})
+target_sources(${PROJECT_NAME} PRIVATE ${resources})
 #carpeta include
-target_include_directories(${PROJECT_NAME} PRIVATE ${INCLUDE_DIR})
+target_include_directories(${PROJECT_NAME} PRIVATE ${INCLUDE_DIR} ${INCLUDE_DIR}/database ${INCLUDE_DIR}/ai)
 #librerias del qt enlazadas
 target_link_libraries(${PROJECT_NAME} PRIVATE
     Qt6::Core
@@ -85,5 +102,12 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
 LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
 )
-
-
+# traducciones
+qt_add_translations(${PROJECT_NAME} TS_FILES ${TS_FILES} QM_FILES_OUTPUT_VARIABLE QM_FILES)
+set(QM_OUTPUT_DIR ${CMAKE_BINARY_DIR}/bin/translations)
+add_custom_command(
+    TARGET ${PROJECT_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${QM_OUTPUT_DIR}
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${QM_FILES} ${QM_OUTPUT_DIR}
+)
+message(STATUS "QM files: ${QM_FILES}")

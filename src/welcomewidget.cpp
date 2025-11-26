@@ -6,6 +6,10 @@ WelcomeWidget::WelcomeWidget(QWidget *parent)
     , ui(new Ui::WelcomeWidget)
 {
     ui->setupUi(this);
+
+    connect(ui->pushButtonContinuar,&QPushButton::clicked,this,[=](){
+        emit goToChatWidgetRequest();
+    });
 }
 
 WelcomeWidget::~WelcomeWidget()
