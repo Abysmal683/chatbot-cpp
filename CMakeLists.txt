@@ -107,7 +107,7 @@ qt_add_executable(${PROJECT_NAME}
 ${SRC_FILES}
 ${HDR_FILES}
 ${UI_FILES}
-${resources}
+${RES_FILES}
 )
 target_sources(${PROJECT_NAME} PRIVATE ${resources})
 #carpeta include
