@@ -14,7 +14,6 @@ MainWindow::MainWindow(QWidget *parent)
     setupStacked();
     setupMenuBar();
     setCentralWidget(stack);
-    connect(welcomeWidget,&WelcomeWidget::goToChatWidgetRequest,this,&MainWindow::goToChatWidget);
 }
 
 MainWindow::~MainWindow()
@@ -22,14 +21,19 @@ MainWindow::~MainWindow()
     delete ui;
 }
 void MainWindow::setupStacked(){
+    //se declaran los punteros
     stack = new QStackedWidget(this);
     welcomeWidget = new WelcomeWidget(this);
     chatWidget = new ChatWidget(this);
     gameLibraryWidget = new GameLibraryWidget(this);
+    //se agregan los widgets al stacked e indica el primero
     stack->addWidget(welcomeWidget);
     stack->addWidget(chatWidget);
     stack->addWidget(gameLibraryWidget);
     stack->setCurrentWidget(welcomeWidget);
+    //se crea un connet para x widget
+    connect(welcomeWidget,&WelcomeWidget::goToChatWidgetRequest,
+        this,&MainWindow::goToChatWidget);
 }
 void MainWindow::setupMenuBar(){
     QMenu *menuInicio = menuBar()->addMenu(tr("Inicio"));
