@@ -31,53 +31,19 @@ set(TS_DIR ${CMAKE_SOURCE_DIR}/translations)
 set(CMAKE_AUTOUIC_SEARCH_PATHS
     ${UI_DIR}
 )
-#archivos explicitamente incluidos
-#set(SRC_FILES
-#${SRC_DIR}/main.cpp
-#${SRC_DIR}/mainwindow.cpp
-#${SRC_DIR}/welcomewidget.cpp
-#${SRC_DIR}/gamelibrarywidget.cpp
-#${SRC_DIR}/chatwidget.cpp
-#${SRC_DIR}/database/gamedatabase.cpp
-#${SRC_DIR}/ai/aiengine.cpp
-#${SRC_DIR}/ai/keyworddectector.cpp
-#${SRC_DIR}/ai/tfindfclassifier.cpp
-#${SRC_DIR}/ai/ruleengine.cpp
-#${SRC_DIR}/ai/recomendationengine.cpp
-#${SRC_DIR}/ai/intentclassifier.cpp
-#)
-#set(HDR_FILES
-#${INCLUDE_DIR}/mainwindow.h
-#${INCLUDE_DIR}/welcomewidget.h
-#${INCLUDE_DIR}/gamelibrarywidget.h
-#${INCLUDE_DIR}/chatwidget.h
-#${INCLUDE_DIR}/database/gamedatabase.h
-#${INCLUDE_DIR}/ai/aiengine.h
-#${INCLUDE_DIR}/ai/keyworddectector.h
-#${INCLUDE_DIR}/ai/tfindfclassifier.h
-#${INCLUDE_DIR}/ai/ruleengine.h
-#${INCLUDE_DIR}/ai/recomendationengine.h
-#${INCLUDE_DIR}/ai/intentclassifier.h
-#)
-#set(UI_FILES
-#${UI_DIR}/mainwindow.ui
-#${UI_DIR}/welcomewidget.ui
-#${UI_DIR}/gamelibrarywidget.ui
-#${UI_DIR}/chatwidget.ui
-#)
-#set(RES_FILES
-#${RES_DIR}/resources.qrc
-#)
-#set(TS_FILES
-#${TS_DIR}/ChatBot_es_PA.ts)
-# agregar recursos
-#qt_add_resources(${SRC_FILES} ${RES_FILES})
 #qt creator usara esto para agrupar archivos por carpetas
 file(GLOB_RECURSE SRC_FILES
 ${SRC_DIR}/*.cpp
 )
 file(GLOB_RECURSE HDR_FILES
 ${HDR_DIR}/*.h
+${HDR_DIR}/database/*.inl
+${HDR_DIR}/*.inl
+${HDR_DIR}/database/*.h
+${HDR_DIR}/ai/*.h
+${HDR_DIR}/json/*.h
+${HDR_DIR}/ai/*.inl
+${HDR_DIR}/json/*.inl
 )
 file(GLOB UI_FILES
 ${UI_DIR}/*.ui
