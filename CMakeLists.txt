@@ -37,13 +37,7 @@ ${SRC_DIR}/*.cpp
 )
 file(GLOB_RECURSE HDR_FILES
 ${HDR_DIR}/*.h
-${HDR_DIR}/database/*.inl
 ${HDR_DIR}/*.inl
-${HDR_DIR}/database/*.h
-${HDR_DIR}/ai/*.h
-${HDR_DIR}/json/*.h
-${HDR_DIR}/ai/*.inl
-${HDR_DIR}/json/*.inl
 )
 file(GLOB UI_FILES
 ${UI_DIR}/*.ui

@@ -5,6 +5,7 @@
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QDebug>
+#include "databasemanager.h"
 template <typename T>
 class BaseEntityDAO
 {

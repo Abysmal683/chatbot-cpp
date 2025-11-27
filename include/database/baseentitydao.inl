@@ -1,7 +1,4 @@
 
-#pragma ONCE
-#include "baseentitydao.h"
-#include <QList>
 template <typename T>
 T BaseEntityDAO<T>::getById(int id) const {
     QSqlQuery q(DataBaseManager::instance().getDatabase());
