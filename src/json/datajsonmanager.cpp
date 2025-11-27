@@ -37,21 +37,21 @@ QJsonArray DataJsonManager::loadArray(const QString& resourcePath, const QString
 //--- Funciones específicas
 
 QStringList DataJsonManager::loadGenres() {
-    const QJsonArray arr = loadArray(":/database/genres.json", "genres");
+    const QJsonArray& arr = loadArray(":/database/genres.json", "genres");
     QStringList result;
     for (const auto &v : arr) result << v.toString();
     return result;
 }
 
 QStringList DataJsonManager::loadPlatforms() {
-    const QJsonArray arr = loadArray(":/database/platforms.json", "platforms");
+    const QJsonArray& arr = loadArray(":/database/platforms.json", "platforms");
     QStringList result;
     for (const auto &v : arr) result << v.toString();
     return result;
 }
 
 QStringList DataJsonManager::loadTags() {
-    const QJsonArray arr = loadArray(":/database/tags.json", "tags");
+    const QJsonArray& arr = loadArray(":/database/tags.json", "tags");
     QStringList result;
     for (const auto &v : arr) result << v.toString();
     return result;

@@ -4,5 +4,8 @@
         <file>imagen/logo-utp.png</file>
         <file>imagen/logo-utp-fondo.png</file>
         <file>database/chatbot_schema.sql</file>
+        <file>database/genres.json</file>
+        <file>database/platforms.json</file>
+        <file>database/tags.json</file>
     </qresource>
 </RCC>

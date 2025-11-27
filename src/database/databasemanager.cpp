@@ -95,14 +95,14 @@ bool DataBaseManager::commit(){
 }
 void DataBaseManager::rollback(){
     //si esta abierto, cancela la transaccion y regresa todo a su ultimo punto
-    if(!db.isOpen()) db.rollback();
+    if(db.isOpen()) db.rollback();
 }
 bool DataBaseManager::clearTable(const QString &tableName){
     //comprobar si esta abierto
     if(!db.isOpen()) return false;
     //se crea un querry tipo delete y se ejecuta
     QSqlQuery q;
-    QString sql = "DELETE FROM " + tableName;
+    QString sql = QStringLiteral("DELETE FROM ̣\"%1\"").arg(tableName);
     //si falla mientras esta ejecutando, alertara
     if(!q.exec(sql)){
         qCritical() << "error limpiando tabla: " << tableName <<
@@ -116,7 +116,11 @@ bool DataBaseManager::rebuildFTS(){
     //reconstruyen los FTS o tabla virtuales si son muy alteradas
     if (!db.isOpen()) return false;
     QSqlQuery q;
-    if (!q.exec("DELETE FROM games_fts")){
+    if(!q.exec("INSERT INTO games_fts(games_fts) VALUES('rebuild')")){
+        qCritical() << "error reconstruyento FTS: " << q.lastError().text();
+        return false;
+    }
+    /*if (!q.exec("DELETE FROM games_fts")){
         qCritical() << "error limpiando FTS: " << q.lastError().text();
         return false;
     }
@@ -124,6 +128,6 @@ bool DataBaseManager::rebuildFTS(){
                 "SELECT id,title,description FROM games")){
         qCritical() << "error reconstruyento FTS: " << q.lastError().text();
         return false;
-    }
+    }*/
     return true;
 }
