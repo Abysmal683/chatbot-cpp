@@ -11,7 +11,6 @@ BaseSimpleDAO::BaseSimpleDAO(const QString& tableName)
 QList<QPair<int, QString>> BaseSimpleDAO::getAll() const {
     QList<QPair<int, QString>> list;
     QSqlQuery q(DataBaseManager::instance().getDatabase());
-
     QString sql = "SELECT id, name FROM " + table + " ORDER BY name ASC";
     if(!q.exec(sql)) {
         qCritical() << "Error getAll() en tabla" << table << ":" << q.lastError().text();
@@ -28,11 +27,13 @@ int BaseSimpleDAO::insert(const QString& name) const {
     QSqlQuery q(DataBaseManager::instance().getDatabase());
     q.prepare("INSERT INTO " + table + " (name) VALUES (:name)");
     q.bindValue(":name", name);
-
+    DataBaseManager::instance().beginTransaction();
     if (!q.exec()) {
         qCritical() << "Error insert() en tabla" << table << ":" << q.lastError().text();
+        DataBaseManager::instance().rollback();
         return -1;
     }
+    DataBaseManager::instance().commit();
     return q.lastInsertId().toInt();
 }
 
@@ -40,11 +41,13 @@ bool BaseSimpleDAO::remove(int id) const {
     QSqlQuery q(DataBaseManager::instance().getDatabase());
     q.prepare("DELETE FROM " + table + " WHERE id = :id");
     q.bindValue(":id", id);
-
+    DataBaseManager::instance().beginTransaction();
     if (!q.exec()) {
         qCritical() << "Error remove() en tabla" << table << ":" << q.lastError().text();
+        DataBaseManager::instance().rollback();
         return false;
     }
+    DataBaseManager::instance().commit();
     return true;
 }
 
@@ -53,11 +56,13 @@ bool BaseSimpleDAO::update(int id, const QString& name) const {
     q.prepare("UPDATE " + table + " SET name = :name WHERE id = :id");
     q.bindValue(":name", name);
     q.bindValue(":id", id);
-
+    DataBaseManager::instance().beginTransaction();
     if (!q.exec()) {
         qCritical() << "Error update() en tabla" << table << ":" << q.lastError().text();
+        DataBaseManager::instance().rollback();
         return false;
     }
+    DataBaseManager::instance().commit();
     return true;
 }
 
