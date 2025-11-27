@@ -33,7 +33,7 @@ bool DataBaseManager::createTables() {
     QString sqlContent = stream.readAll();
     schemaFile.close();
     //divide los comandos para ejecutarlo 1 a 1 seperados por el ;,puede fallar si ahi ; en comentarios
-    QSqlQuery query;
+    QSqlQuery q;
     const QStringList commands = sqlContent.split(';', Qt::SkipEmptyParts);
 
     if (!db.transaction()) qWarning() << "No se pudo iniciar transacción";
@@ -43,9 +43,10 @@ bool DataBaseManager::createTables() {
         if (trimmed.isEmpty())
             continue;
 
-        if (!query.exec(trimmed)) {
+        if (!q.exec(trimmed)) {
             qCritical() << "Error ejecutando SQL:" << trimmed;
-            qCritical() << "Detalle:" << query.lastError().text();
+            qCritical() << "Detalle:" << q.lastError().text();
+            db.rollback();
             return false;
         }
     }
@@ -59,9 +60,70 @@ bool DataBaseManager::createTables() {
     return true;
 }
 bool DataBaseManager::initialize() {
+    //inicia por primera ves la base de dato
     if (!db.open()) {
         qCritical() << "ERROR al abrir la base de datos:" << db.lastError().text();
         return false;
     }
     return createTables();
+}
+QSqlDatabase& DataBaseManager::getDatabase() {
+    return db;
+}
+bool DataBaseManager::open(){
+    //si esta abierto, avisa, en caso contrario lo intenta abrir
+    if(db.isOpen()) return true;
+    return db.open();
+}
+void DataBaseManager::close(){
+    //si esta abierto, lo cierra
+    if(db.isOpen()) db.close();
+}
+bool DataBaseManager::isOpen()const {
+    //envia si esta abierto o cerrado en bool
+    return db.isOpen();
+}
+bool DataBaseManager::beginTransaction(){
+    //comprueba si esta abierto, para entrar en modo transaccion segura
+    if(!db.isOpen()) return false;
+    return db.transaction();
+}
+bool DataBaseManager::commit(){
+    //comprueba si esta abierto, para finalizar la transaccion segura y aprobrar si es posible
+    if(!db.isOpen()) return false;
+    return db.commit();
+}
+void DataBaseManager::rollback(){
+    //si esta abierto, cancela la transaccion y regresa todo a su ultimo punto
+    if(!db.isOpen()) db.rollback();
+}
+bool DataBaseManager::clearTable(const QString &tableName){
+    //comprobar si esta abierto
+    if(!db.isOpen()) return false;
+    //se crea un querry tipo delete y se ejecuta
+    QSqlQuery q;
+    QString sql = "DELETE FROM " + tableName;
+    //si falla mientras esta ejecutando, alertara
+    if(!q.exec(sql)){
+        qCritical() << "error limpiando tabla: " << tableName <<
+            q.lastError().text();
+        return false;
+    }
+    //si funciona, retornara true
+    return true;
+}
+bool DataBaseManager::rebuildFTS(){
+    //reconstruyen los FTS o tabla virtuales si son muy alteradas
+    if (!db.isOpen()) return false;
+    QSqlQuery q;
+    if (!q.exec("DELETE FROM games_fts")){
+        qCritical() << "error limpiando FTS: " << q.lastError().text();
+        return false;
+    }
+    if(!q.exec("INSERT INTO games_fts (content_rowid, title, description) "
+                "SELECT id,title,description FROM games")){
+        qCritical() << "error reconstruyento FTS: " << q.lastError().text();
+        return false;
+    }
+    return true;
 }

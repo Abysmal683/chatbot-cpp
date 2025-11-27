@@ -111,7 +111,7 @@ ${RES_FILES}
 )
 target_sources(${PROJECT_NAME} PRIVATE ${resources})
 #carpeta include
-target_include_directories(${PROJECT_NAME} PRIVATE ${HDR_DIR} ${HDR_DIR}/database ${HDR_DIR}/ai)
+target_include_directories(${PROJECT_NAME} PRIVATE ${HDR_DIR} ${HDR_DIR}/database ${HDR_DIR}/ai ${HDR_DIR}/json)
 #librerias del qt enlazadas
 target_link_libraries(${PROJECT_NAME} PRIVATE
     Qt6::Core
