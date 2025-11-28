@@ -15,6 +15,12 @@ DataBaseManager::DataBaseManager() {
     if(!dir.exists()) dir.mkpath(dir.path());
     db.setDatabaseName(dbpath);
 }
+DataBaseManager::~DataBaseManager(){
+    QString name = db.connectionName();
+    db.close();
+    QSqlDatabase::removeDatabase(name);
+}
+
 DataBaseManager& DataBaseManager::instance() {
     //la primera ves crea una instancia, la siguiente la reutiliza
     static DataBaseManager instance;
@@ -33,7 +39,7 @@ bool DataBaseManager::createTables() {
     QString sqlContent = stream.readAll();
     schemaFile.close();
     //divide los comandos para ejecutarlo 1 a 1 seperados por el ;,puede fallar si ahi ; en comentarios
-    QSqlQuery q;
+    QSqlQuery q(db);
     const QStringList commands = sqlContent.split(';', Qt::SkipEmptyParts);
 
     if (!db.transaction()) qWarning() << "No se pudo iniciar transacción";
@@ -101,8 +107,8 @@ bool DataBaseManager::clearTable(const QString &tableName){
     //comprobar si esta abierto
     if(!db.isOpen()) return false;
     //se crea un querry tipo delete y se ejecuta
-    QSqlQuery q;
-    QString sql = QStringLiteral("DELETE FROM ̣\"%1\"").arg(tableName);
+    QSqlQuery q(db);
+    QString sql = QStringLiteral("DELETE FROM \"%1\"").arg(tableName);
     //si falla mientras esta ejecutando, alertara
     if(!q.exec(sql)){
         qCritical() << "error limpiando tabla: " << tableName <<
@@ -120,14 +126,6 @@ bool DataBaseManager::rebuildFTS(){
         qCritical() << "error reconstruyento FTS: " << q.lastError().text();
         return false;
     }
-    /*if (!q.exec("DELETE FROM games_fts")){
-        qCritical() << "error limpiando FTS: " << q.lastError().text();
-        return false;
-    }
-    if(!q.exec("INSERT INTO games_fts (content_rowid, title, description) "
-                "SELECT id,title,description FROM games")){
-        qCritical() << "error reconstruyento FTS: " << q.lastError().text();
-        return false;
-    }*/
+
     return true;
 }

@@ -22,6 +22,7 @@ class DataBaseManager{
 
     private:
         DataBaseManager();
+        ~DataBaseManager();
         DataBaseManager(const DataBaseManager&) = delete;
         DataBaseManager& operator=(const DataBaseManager&) = delete;
         bool createTables();
