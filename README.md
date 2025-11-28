@@ -13,6 +13,7 @@ tema seleccionado:Asistente de Recomendaciones de Juegos
 -  mkdir src
 -  mkdir resources/json
 aqui provocara un conflicto
+aqui sufri el conflicto
 ## Licencia
 
 Este proyecto usa el framework [Qt](https://www.qt.io) bajo la licencia **LGPL v3**.  
