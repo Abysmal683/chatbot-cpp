@@ -23,8 +23,8 @@ void ConversationHistoryDAO::bindInsert(QSqlQuery& q, const ConversationHistory&
 {
     q.prepare(
         "INSERT INTO conversation_history "
-        "(id, user_message, bot_message) "
-        "VALUES (NULL, :u, :b)"
+        "(user_message, bot_message) "
+        "VALUES (:u, :b)"
         // current_timestamp lo llena SQLite
         );
 
