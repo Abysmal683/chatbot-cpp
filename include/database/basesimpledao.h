@@ -1,12 +1,12 @@
 #ifndef BASESIMPLEDAO_H
 #define BASESIMPLEDAO_H
 
+#include <QSqlDatabase>
 #include <QString>
-
 class BaseSimpleDAO
 {
     public:
-        explicit BaseSimpleDAO(const QString& tableName);
+        explicit BaseSimpleDAO(const QString& tableName,QSqlDatabase& db);
         virtual ~BaseSimpleDAO() = default;
 
         // CRUD genérico
@@ -23,6 +23,7 @@ class BaseSimpleDAO
 
     protected:
         QString table;
+        QSqlDatabase& db;
 };
 
 #endif // BASESIMPLEDAO_H

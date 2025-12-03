@@ -1,19 +1,19 @@
 #include "baserelationdao.h"
-#include "databasemanager.h"
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QDebug>
 
 BaseRelationDAO::BaseRelationDAO(const QString& tableName,
                                  const QString& leftColumn,
-                                 const QString& rightColumn)
+                                 const QString& rightColumn,
+                                 QSqlDatabase& db)
     : table(tableName),
     leftCol(leftColumn),
-    rightCol(rightColumn)
+    rightCol(rightColumn),db(db)
 {}
 
 bool BaseRelationDAO::add(int L, int R) const {
-    QSqlQuery q(DataBaseManager::instance().getDatabase());
+    QSqlQuery q(db);
     q.prepare("INSERT INTO " + table +
               " (" + leftCol + ", " + rightCol + ") VALUES (:l, :r)");
     q.bindValue(":l", L);
@@ -27,7 +27,7 @@ bool BaseRelationDAO::add(int L, int R) const {
 }
 
 bool BaseRelationDAO::remove(int L, int R) const {
-    QSqlQuery q(DataBaseManager::instance().getDatabase());
+    QSqlQuery q(db);
     q.prepare("DELETE FROM " + table +
               " WHERE " + leftCol + " = :l AND " + rightCol + " = :r");
     q.bindValue(":l", L);
@@ -36,7 +36,7 @@ bool BaseRelationDAO::remove(int L, int R) const {
 }
 
 bool BaseRelationDAO::clearLeft(int L) const {
-    QSqlQuery q(DataBaseManager::instance().getDatabase());
+    QSqlQuery q(db);
     q.prepare("DELETE FROM " + table +
               " WHERE " + leftCol + " = :l");
     q.bindValue(":l", L);
@@ -45,7 +45,7 @@ bool BaseRelationDAO::clearLeft(int L) const {
 
 QList<int> BaseRelationDAO::getRights(int L) const {
     QList<int> list;
-    QSqlQuery q(DataBaseManager::instance().getDatabase());
+    QSqlQuery q(db);
     q.prepare("SELECT " + rightCol + " FROM " + table +
               " WHERE " + leftCol + " = :l");
     q.bindValue(":l", L);
@@ -58,7 +58,7 @@ QList<int> BaseRelationDAO::getRights(int L) const {
 
 QList<int> BaseRelationDAO::getLefts(int R) const {
     QList<int> list;
-    QSqlQuery q(DataBaseManager::instance().getDatabase());
+    QSqlQuery q(db);
     q.prepare("SELECT " + leftCol + " FROM " + table +
               " WHERE " + rightCol + " = :r");
     q.bindValue(":r", R);
@@ -70,7 +70,7 @@ QList<int> BaseRelationDAO::getLefts(int R) const {
 }
 
 bool BaseRelationDAO::exists(int L, int R) const {
-    QSqlQuery q(DataBaseManager::instance().getDatabase());
+    QSqlQuery q(db);
     q.prepare("SELECT COUNT(*) FROM " + table +
               " WHERE " + leftCol + " = :l AND " + rightCol + " = :r");
     q.bindValue(":l", L);
