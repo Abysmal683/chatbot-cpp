@@ -76,33 +76,6 @@ bool DataBaseManager::initialize() {
 QSqlDatabase& DataBaseManager::getDatabase() {
     return db;
 }
-bool DataBaseManager::open(){
-    //si esta abierto, avisa, en caso contrario lo intenta abrir
-    if(db.isOpen()) return true;
-    return db.open();
-}
-void DataBaseManager::close(){
-    //si esta abierto, lo cierra
-    if(db.isOpen()) db.close();
-}
-bool DataBaseManager::isOpen()const {
-    //envia si esta abierto o cerrado en bool
-    return db.isOpen();
-}
-bool DataBaseManager::beginTransaction(){
-    //comprueba si esta abierto, para entrar en modo transaccion segura
-    if(!db.isOpen()) return false;
-    return db.transaction();
-}
-bool DataBaseManager::commit(){
-    //comprueba si esta abierto, para finalizar la transaccion segura y aprobrar si es posible
-    if(!db.isOpen()) return false;
-    return db.commit();
-}
-void DataBaseManager::rollback(){
-    //si esta abierto, cancela la transaccion y regresa todo a su ultimo punto
-    if(db.isOpen()) db.rollback();
-}
 bool DataBaseManager::clearTable(const QString &tableName){
     //comprobar si esta abierto
     if(!db.isOpen()) return false;
@@ -116,16 +89,5 @@ bool DataBaseManager::clearTable(const QString &tableName){
         return false;
     }
     //si funciona, retornara true
-    return true;
-}
-bool DataBaseManager::rebuildFTS(){
-    //reconstruyen los FTS o tabla virtuales si son muy alteradas
-    if (!db.isOpen()) return false;
-    QSqlQuery q;
-    if(!q.exec("INSERT INTO games_fts(games_fts) VALUES('rebuild')")){
-        qCritical() << "error reconstruyento FTS: " << q.lastError().text();
-        return false;
-    }
-
     return true;
 }
