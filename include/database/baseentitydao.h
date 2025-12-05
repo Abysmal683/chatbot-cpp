@@ -55,11 +55,7 @@ QList<T> BaseEntityDAO<T>::getAll() const {
 
 template <typename T>
 int BaseEntityDAO<T>::insert(const T& entity) const {
-    QString sql = "INSERT INTO " + table + " VALUES (NULL"; // id AUTOINCREMENT
     QSqlQuery q(db);
-
-    // Prepara: INSERT INTO table VALUES (NULL, ?, ?, ?, ...)
-    q.prepare(sql + ")");
 
     bindInsert(q, entity);
 
