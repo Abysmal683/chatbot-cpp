@@ -17,6 +17,7 @@ public:
     // Extras útiles para esta tabla
     QList<MemoryLongTerm> findByKey(const QString& key) const;
     QList<MemoryLongTerm> findImportant(int minImportance) const;
+    QList<QString> listKeys() const;
 };
 
 #endif // MEMORYLONGTERMDAO_H

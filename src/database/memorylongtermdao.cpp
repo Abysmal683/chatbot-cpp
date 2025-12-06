@@ -82,4 +82,17 @@ QList<MemoryLongTerm> MemoryLongTermDAO::findImportant(int minImportance) const 
 
     return list;
 }
+QList<QString> MemoryLongTermDAO::listKeys() const
+{
+    QList<QString> keys;
+    QSqlQuery q(db);
 
+    q.prepare("SELECT DISTINCT key FROM memory_long_term ORDER BY key ASC");
+
+    if (!q.exec()) return keys;
+
+    while (q.next())
+        keys.append(q.value(0).toString());
+
+    return keys;
+}

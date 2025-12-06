@@ -48,3 +48,26 @@ void ConversationHistoryDAO::bindUpdate(QSqlQuery& q, const ConversationHistory&
     q.bindValue(":b", m.bot_message);
     q.bindValue(":id", m.id);
 }
+QList<ConversationHistory> ConversationHistoryDAO::getLastMessages(int limit) const
+{
+    QList<ConversationHistory> list;
+
+    QSqlQuery q(db);
+    q.prepare(
+        "SELECT id, user_message, bot_message, current_timestamp "
+        "FROM conversation_history "
+        "ORDER BY id DESC "
+        "LIMIT :lim"
+        );
+
+    q.bindValue(":lim", limit);
+
+    if (!q.exec())
+        return list; // devolver vacío si falla
+
+    while (q.next()) {
+        list.append(fromQuery(q));
+    }
+
+    return list;
+}

@@ -13,5 +13,6 @@ public:
     ConversationHistory fromQuery(const QSqlQuery& q) const override;
     void bindInsert(QSqlQuery& q, const ConversationHistory& m) const override;
     void bindUpdate(QSqlQuery& q, const ConversationHistory& m) const override;
+    QList<ConversationHistory> getLastMessages(int limit) const;
 };
 #endif // CONVERSATIONHISTORYDAO_H
