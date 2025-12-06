@@ -23,7 +23,7 @@ public:
                      TFIDFClassifier *tfidf,
                      RuleEngine *rules);
 
-    IntentResult classify(const QString &userText);
+    IntentResult classify(const QString &userText) const;
 
     void setKeywordCategories(const QHash<QString, QString> &categories);
 

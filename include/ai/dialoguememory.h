@@ -14,17 +14,15 @@ class DialogueMemory
 public:
     DialogueMemory() = default;
 
-    // Añadir mensajes al historial
+    // API existente
     void addMessage(const QString& sender, const QString& text);
-
-    // Últimos N mensajes
     QList<DialogueMessage> getLast(int n) const;
-
-    // Sesión completa (se borra al reiniciar)
     QList<DialogueMessage> getFullSession() const;
-
-    // Limpia la sesión
     void clear();
+
+    // NUEVO: helpers específicos
+    void addUserMessage(const QString& text);
+    void addBotMessage(const QString& text);
 
 private:
     QList<DialogueMessage> buffer;

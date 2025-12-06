@@ -48,7 +48,7 @@ QString ContextBuilder::buildMemorySection() const
     if (!longTermStore)
         return "No long-term memory available.\n";
 
-    QList<QString> keys = longTermStore->listKeys();
+    const QList<QString> keys = longTermStore->listKeys();
     if (keys.isEmpty())
         return "No saved long-term memory.\n";
 
@@ -56,7 +56,7 @@ QString ContextBuilder::buildMemorySection() const
 
     for (const QString& key : keys) {
 
-        QList<MemoryLongTerm> list = longTermStore->getAllMemories(key);
+        const QList<MemoryLongTerm> list = longTermStore->getAllMemories(key);
 
         if (list.isEmpty())
             continue;
@@ -85,7 +85,7 @@ QString ContextBuilder::buildHistorySection() const
     if (!historyDao)
         return "No conversation history.\n";
 
-    auto last = historyDao->getLastMessages(5);
+    const auto last = historyDao->getLastMessages(5);
     if (last.isEmpty())
         return "No previous messages.\n";
 

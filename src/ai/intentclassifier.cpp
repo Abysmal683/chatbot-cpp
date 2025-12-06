@@ -17,7 +17,7 @@ void IntentClassifier::setKeywordCategories(const QHash<QString, QString> &categ
     keywordCategories = categories;
 }
 
-IntentResult IntentClassifier::classify(const QString &userText)
+IntentResult IntentClassifier::classify(const QString &userText)const
 {
     IntentResult result;
     result.intent = "UNKNOWN";
