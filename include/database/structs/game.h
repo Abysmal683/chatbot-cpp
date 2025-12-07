@@ -8,8 +8,8 @@ struct Game {
     QString title;
     int rating = 1;
     QString description;
-    int avg_playtime_minutes;
-
+    int avgPlaytime;
+    QString createdAt;
     // solo IDs
     QList<int> tags;
     QList<int> genres;

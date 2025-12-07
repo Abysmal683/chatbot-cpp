@@ -114,7 +114,9 @@ CREATE TABLE IF NOT EXISTS keywords(
     
     keyword TEXT NOT NULL,             -- palabra clave
    
-    category TEXT NOT NULL		-- tipo de peticion
+    category TEXT NOT NULL,		-- tipo de peticion
+
+    UNIQUE(keyword,category)
 );
 
 CREATE INDEX IF NOT EXISTS idx_keywords_keyword ON keywords(keyword);

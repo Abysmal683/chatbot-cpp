@@ -1,69 +1,71 @@
 #include "gamedao.h"
+#include "gametagsdao.h"
+#include "gameplatformsdao.h"
+#include "gamegenresdao.h"
 
 GameDAO::GameDAO(QSqlDatabase& db,
                  GameTagsDAO& tagRel,
                  GameGenresDAO& genreRel,
                  GamePlatformsDAO& platformRel)
-    : BaseEntityDAO<Game>("games", db),
+    : BaseEntityDAO<Game>(T, db),
     tagRelation(tagRel),
     genreRelation(genreRel),
     platformRelation(platformRel)
 {}
-// ------------------------------
-// MAPEAR QUERIES → Game
-// ------------------------------
+
+/* ----------------------------------------------------------
+ * MAPEAR QUERY → Game
+ * Uso q.record().value("col") para indexación por nombre
+ * ----------------------------------------------------------*/
 Game GameDAO::fromQuery(const QSqlQuery& q) const {
     Game g;
-    g.id                  = q.value("id").toInt();
-    g.title               = q.value("title").toString();
-    g.rating              = q.value("rating").toInt();
-    g.description         = q.value("description").toString();
-    g.avg_playtime_minutes = q.value("avg_playtime_minutes").toInt();
+    g.id = q.value(C_Id).toInt();
+    g.title = q.value(C_Title).toString();
+    g.rating = q.value(C_Rating).toInt();
+    g.description = q.value(C_Description).toString();
+    g.avgPlaytime = q.value(C_AvgPlay).toInt();
     return g;
 }
 
-// ------------------------------
-// BIND PARA INSERTAR
-// ------------------------------
+/* ----------------------------------------------------------
+ * BIND INSERT
+ * ----------------------------------------------------------*/
 void GameDAO::bindInsert(QSqlQuery& q, const Game& g) const {
-    q.prepare("INSERT INTO games "
-              "(id, title, rating, description, avg_playtime_minutes) "
-              "VALUES (NULL, :title, :rating, :desc, :play)");
+    // INSERT INTO games (title, rating, description, avgPlaytime) VALUES (:title, :rating, :desc, :play)
+    q.prepare(QString("INSERT INTO %1 (%2, %3, %4, %5) "
+                      "VALUES (:title, :rating, :desc, :play)")
+                  .arg(T, C_Title, C_Rating, C_Description, C_AvgPlay));
 
     q.bindValue(":title", g.title);
     q.bindValue(":rating", g.rating);
-    q.bindValue(":desc",  g.description);
-    q.bindValue(":play",  g.avg_playtime_minutes);
+    q.bindValue(":desc", g.description);
+    q.bindValue(":play", g.avgPlaytime);
 }
 
-// ------------------------------
-// BIND PARA UPDATE
-// ------------------------------
+/* ----------------------------------------------------------
+ * BIND UPDATE
+ * ----------------------------------------------------------*/
 void GameDAO::bindUpdate(QSqlQuery& q, const Game& g) const {
-    q.prepare("UPDATE games SET "
-              " title = :title, "
-              " rating = :rating, "
-              " description = :desc, "
-              " avg_playtime_minutes = :play "
-              "WHERE id = :id");
+    // UPDATE games SET title = :title, rating = :rating, description = :desc, avgPlaytime = :play WHERE id = :id
+    q.prepare(QString("UPDATE %1 SET %2 = :title, %3 = :rating, %4 = :desc, %5 = :play WHERE %6 = :id")
+                  .arg(T, C_Title, C_Rating, C_Description, C_AvgPlay, C_Id));
 
     q.bindValue(":title", g.title);
     q.bindValue(":rating", g.rating);
-    q.bindValue(":desc",  g.description);
-    q.bindValue(":play",  g.avg_playtime_minutes);
-
+    q.bindValue(":desc", g.description);
+    q.bindValue(":play", g.avgPlaytime);
     q.bindValue(":id", g.id);
 }
 
-// ------------------------------
-// GET COMPLETO CON RELACIONES
-// ------------------------------
+/* ----------------------------------------------------------
+ * GET COMPLETO (con relaciones)
+ * ----------------------------------------------------------*/
 Game GameDAO::getFull(int id) const {
     Game g = getById(id);
     if (g.id == 0) return g;
 
-    g.tags      = tagRelation.getRights(id);
-    g.genres    = genreRelation.getRights(id);
+    g.tags = tagRelation.getRights(id);
+    g.genres = genreRelation.getRights(id);
     g.platforms = platformRelation.getRights(id);
     return g;
 }
@@ -71,8 +73,8 @@ Game GameDAO::getFull(int id) const {
 QList<Game> GameDAO::getAllFull() const {
     QList<Game> list = getAll();
     for (Game& g : list) {
-        g.tags      = tagRelation.getRights(g.id);
-        g.genres    = genreRelation.getRights(g.id);
+        g.tags = tagRelation.getRights(g.id);
+        g.genres = genreRelation.getRights(g.id);
         g.platforms = platformRelation.getRights(g.id);
     }
     return list;

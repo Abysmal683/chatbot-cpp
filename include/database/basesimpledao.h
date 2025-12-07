@@ -22,7 +22,7 @@ class BaseSimpleDAO
         int count() const;
 
     protected:
-        QString table;
+        QString tableName;
         QSqlDatabase& db;
 };
 

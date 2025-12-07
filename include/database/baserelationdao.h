@@ -21,7 +21,7 @@ public:
     bool exists(int leftId, int rightId) const;
 
 protected:
-    QString table;
+    QString tableName;
     QString leftCol;
     QString rightCol;
     QSqlDatabase& db;

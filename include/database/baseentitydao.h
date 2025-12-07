@@ -5,21 +5,21 @@
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QDebug>
+
 template <typename T>
-class BaseEntityDAO
-{
+class BaseEntityDAO {
 public:
-    explicit BaseEntityDAO(const QString& tableName,QSqlDatabase& db)
-        : table(tableName),db(db) {}
+    explicit BaseEntityDAO(const QString& tableName, QSqlDatabase& db)
+        : tableName(tableName), db(db) {}
 
     virtual ~BaseEntityDAO() = default;
 
-    // Métodos que cada DAO concreto debe implementar
+    // Métodos obligatorios
     virtual T fromQuery(const QSqlQuery& q) const = 0;
     virtual void bindInsert(QSqlQuery& q, const T& entity) const = 0;
     virtual void bindUpdate(QSqlQuery& q, const T& entity) const = 0;
 
-    // CRUD genérico
+    // CRUD
     T getById(int id) const;
     QList<T> getAll() const;
     int insert(const T& entity) const;
@@ -27,40 +27,41 @@ public:
     bool remove(int id) const;
 
 protected:
-    QString table;
+    QString tableName;
     QSqlDatabase& db;
 };
+
+/* ------------------------------ */
+/*          IMPLEMENTACIÓN        */
+/* ------------------------------ */
 
 template <typename T>
 T BaseEntityDAO<T>::getById(int id) const {
     QSqlQuery q(db);
-    q.prepare("SELECT * FROM " + table + " WHERE id = :id");
+    q.prepare(QString("SELECT * FROM %1 WHERE id = :id").arg(tableName));
     q.bindValue(":id", id);
 
-    if (!q.exec() || !q.next()) return T();
-    return fromQuery(q);
+    return (q.exec() && q.next()) ? fromQuery(q) : T();
 }
 
 template <typename T>
 QList<T> BaseEntityDAO<T>::getAll() const {
     QList<T> list;
-    QSqlQuery q("SELECT * FROM " + table + " ORDER BY id ASC",
-                db);
+    QSqlQuery q(QString("SELECT * FROM %1 ORDER BY id ASC").arg(tableName), db);
 
-    if (!q.exec()) return list;
+    if (q.exec())
+        while (q.next()) list.append(fromQuery(q));
 
-    while (q.next()) list.append(fromQuery(q));
     return list;
 }
 
 template <typename T>
 int BaseEntityDAO<T>::insert(const T& entity) const {
     QSqlQuery q(db);
-
     bindInsert(q, entity);
 
     if (!q.exec()) {
-        qCritical() << "Error insert() en tabla" << table << ":" << q.lastError().text();
+        qCritical() << "[ERROR insert]" << tableName << ":" << q.lastError().text();
         return -1;
     }
     return q.lastInsertId().toInt();
@@ -69,12 +70,10 @@ int BaseEntityDAO<T>::insert(const T& entity) const {
 template <typename T>
 bool BaseEntityDAO<T>::update(const T& entity) const {
     QSqlQuery q(db);
-
-    // El DAO concreto arma el query con bindUpdate()
     bindUpdate(q, entity);
 
     if (!q.exec()) {
-        qCritical() << "Error update() en tabla" << table << ":" << q.lastError().text();
+        qCritical() << "[ERROR update]" << tableName << ":" << q.lastError().text();
         return false;
     }
     return true;
@@ -83,11 +82,9 @@ bool BaseEntityDAO<T>::update(const T& entity) const {
 template <typename T>
 bool BaseEntityDAO<T>::remove(int id) const {
     QSqlQuery q(db);
-    q.prepare("DELETE FROM " + table + " WHERE id = :id");
+    q.prepare(QString("DELETE FROM %1 WHERE id = :id").arg(tableName));
     q.bindValue(":id", id);
-
-    if (!q.exec()) return false;
-    return true;
+    return q.exec();
 }
 
 #endif // BASEENTITYDAO_H

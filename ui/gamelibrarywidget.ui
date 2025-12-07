@@ -29,7 +29,7 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayoutBuscador">
      <item>
-      <widget class="QLabel" name="labelBuscador">
+      <widget class="QLabel" name="labelTabla">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
          <horstretch>0</horstretch>
@@ -37,22 +37,12 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Nombre</string>
+        <string>Tabla:</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="lineEditBuscador">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-         <horstretch>2</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="placeholderText">
-        <string>Buscar por nombre</string>
-       </property>
-      </widget>
+      <widget class="QComboBox" name="comboBoxTabla"/>
      </item>
     </layout>
    </item>
@@ -60,121 +50,25 @@
     <widget class="QTableView" name="tableViewLibreria"/>
    </item>
    <item>
-    <layout class="QGridLayout" name="gridLayoutDatos">
-     <item row="0" column="1">
-      <widget class="QLineEdit" name="lineEditNombre">
-       <property name="placeholderText">
-        <string>nombre del videojuego</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="2">
-      <widget class="QLabel" name="labelCalificacion">
+    <layout class="QVBoxLayout" name="verticalLayout_2">
+     <item>
+      <widget class="QPushButton" name="pushButtonAgregar">
        <property name="text">
-        <string>Calificacion</string>
+        <string>Agregar Dato</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
-      <widget class="QComboBox" name="comboBoxGenero">
-       <property name="toolTip">
-        <string>El genero principal del Videojuego</string>
-       </property>
-       <property name="statusTip">
-        <string/>
-       </property>
-       <property name="whatsThis">
-        <string/>
-       </property>
-       <property name="editable">
-        <bool>true</bool>
-       </property>
-       <property name="placeholderText">
-        <string/>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="2">
-      <widget class="QLabel" name="labelPrologo">
+     <item>
+      <widget class="QPushButton" name="pushButtonActualizar">
        <property name="text">
-        <string>Prologo</string>
+        <string>Actualizar Dato</string>
        </property>
       </widget>
      </item>
-     <item row="0" column="0">
-      <widget class="QLabel" name="labelNombre">
-       <property name="text">
-        <string>Nombre</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="3">
-      <widget class="QDoubleSpinBox" name="doubleSpinBoxCalificacion">
-       <property name="font">
-        <font>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="toolTip">
-        <string>puntuacion del 1 al 5 con decimales del videojuego</string>
-       </property>
-       <property name="statusTip">
-        <string/>
-       </property>
-       <property name="whatsThis">
-        <string/>
-       </property>
-       <property name="wrapping">
-        <bool>false</bool>
-       </property>
-       <property name="readOnly">
-        <bool>false</bool>
-       </property>
-       <property name="showGroupSeparator" stdset="0">
-        <bool>false</bool>
-       </property>
-       <property name="decimals">
-        <number>1</number>
-       </property>
-       <property name="minimum">
-        <double>1.000000000000000</double>
-       </property>
-       <property name="maximum">
-        <double>5.000000000000000</double>
-       </property>
-       <property name="singleStep">
-        <double>0.500000000000000</double>
-       </property>
-       <property name="stepType">
-        <enum>QAbstractSpinBox::StepType::DefaultStepType</enum>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="3">
-      <widget class="QLineEdit" name="lineEditPrologo">
-       <property name="placeholderText">
-        <string>Historia del Videojuego</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="labelGenero">
-       <property name="text">
-        <string>Genero</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="4">
-      <widget class="QPushButton" name="pushButtonGuardar">
-       <property name="text">
-        <string>Guardar Datos</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="4">
+     <item>
       <widget class="QPushButton" name="pushButtonEliminar">
        <property name="text">
-        <string>Eliminar Juego</string>
+        <string>Eliminar Dato</string>
        </property>
       </widget>
      </item>

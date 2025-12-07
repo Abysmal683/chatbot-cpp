@@ -1,58 +1,76 @@
 #include "keyworddao.h"
 
 KeywordDAO::KeywordDAO(QSqlDatabase& db)
-    : BaseEntityDAO("keywords", db)
+    : BaseEntityDAO<Keyword>(T, db)
 {}
 
-// ----------------------------
-// fromQuery
-// ----------------------------
+/* ----------------------------------------------------------
+ * MAPEAR QUERY → Keyword
+ * ----------------------------------------------------------*/
 Keyword KeywordDAO::fromQuery(const QSqlQuery& q) const {
     Keyword k;
-    k.id       = q.value("id").toInt();
-    k.keyword  = q.value("keyword").toString();
-    k.category = q.value("category").toString();
+    k.id       = q.value(C_Id).toInt();
+    k.keyword  = q.value(C_Key).toString();
+    k.category = q.value(C_Cat).toString();
     return k;
 }
 
-// ----------------------------
-// bindInsert
-// ----------------------------
+/* ----------------------------------------------------------
+ * INSERT
+ * ----------------------------------------------------------*/
 void KeywordDAO::bindInsert(QSqlQuery& q, const Keyword& k) const {
-    q.prepare("INSERT INTO keywords (id, keyword, category) "
-              "VALUES (NULL, :keyword, :category)");
+    q.prepare(QString("INSERT INTO %1 (%2, %3) "
+                      "VALUES (:keyword, :category)")
+                  .arg(T, C_Key, C_Cat));
 
     q.bindValue(":keyword",  k.keyword);
     q.bindValue(":category", k.category);
 }
 
-// ----------------------------
-// bindUpdate
-// ----------------------------
+/* ----------------------------------------------------------
+ * UPDATE
+ * ----------------------------------------------------------*/
 void KeywordDAO::bindUpdate(QSqlQuery& q, const Keyword& k) const {
-    q.prepare("UPDATE keywords "
-              "SET keyword = :keyword, category = :category "
-              "WHERE id = :id");
+    q.prepare(QString("UPDATE %1 SET %2 = :keyword, %3 = :category "
+                      "WHERE %4 = :id")
+                  .arg(T, C_Key, C_Cat, C_Id));
 
-    q.bindValue(":keyword", k.keyword);
+    q.bindValue(":keyword",  k.keyword);
     q.bindValue(":category", k.category);
-    q.bindValue(":id",      k.id);
+    q.bindValue(":id",       k.id);
 }
 
-// ----------------------------
-// findByCategory
-// ----------------------------
-QList<Keyword> KeywordDAO::findByCategory(const QString& cat) const {
+/* ----------------------------------------------------------
+ * FILTRAR POR CATEGORÍA
+ * ----------------------------------------------------------*/
+QList<Keyword> KeywordDAO::findByCategory(const QString& category) const {
     QList<Keyword> list;
     QSqlQuery q(db);
 
-    q.prepare("SELECT * FROM keywords WHERE category = :category ORDER BY keyword ASC");
-    q.bindValue(":category", cat);
+    q.prepare(QString("SELECT * FROM %1 WHERE %2 = :category ORDER BY %3 ASC")
+                  .arg(T, C_Cat, C_Key));
 
-    if (!q.exec()) {
-        qCritical() << "Error findByCategory():" << q.lastError().text();
-        return list;
-    }
+    q.bindValue(":category", category);
+    q.exec();
+
+    while (q.next())
+        list.append(fromQuery(q));
+
+    return list;
+}
+
+/* ----------------------------------------------------------
+ * BÚSQUEDA FLEXIBLE
+ * ----------------------------------------------------------*/
+QList<Keyword> KeywordDAO::search(const QString& text) const {
+    QList<Keyword> list;
+    QSqlQuery q(db);
+
+    q.prepare(QString("SELECT * FROM %1 WHERE %2 LIKE :text ORDER BY %2 ASC")
+                  .arg(T, C_Key));
+
+    q.bindValue(":text", "%" + text + "%");
+    q.exec();
 
     while (q.next())
         list.append(fromQuery(q));
