@@ -15,12 +15,16 @@ GameLibraryWidget::GameLibraryWidget(QSqlDatabase& db, QWidget *parent)
         Constants::Tables::Genres,
         Constants::Tables::Platforms,
         Constants::Tables::Tags,
+        Constants::Tables::GameGenres,
+        Constants::Tables::GamePlatforms,
+        Constants::Tables::GameTags,
         Constants::Tables::Keywords,
         Constants::Tables::Rules,
         Constants::Tables::UserPreferences,
         Constants::Tables::Logs,
         Constants::Tables::MemoryLongTerm,
         Constants::Tables::MemoryShortTerm
+
     });
 
     // Inicializa modelos
@@ -41,7 +45,8 @@ GameLibraryWidget::GameLibraryWidget(QSqlDatabase& db, QWidget *parent)
             this, &GameLibraryWidget::onActualizarClicked);
     connect(ui->pushButtonEliminar, &QPushButton::clicked,
             this, &GameLibraryWidget::onEliminarClicked);
-
+    connect(ui->pushButtonRecargar, &QPushButton::clicked,
+            this, &GameLibraryWidget::onRecargarClicked);
     // Mostrar primera tabla
     loadTable(ui->comboBoxTabla->currentText());
 }
@@ -74,7 +79,11 @@ void GameLibraryWidget::loadTable(const QString& tableName)
     ui->tableViewLibreria->setModel(model);
 
     // Evitamos edición directa en la vista
-    ui->tableViewLibreria->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    ui->tableViewLibreria->setEditTriggers(
+        QAbstractItemView::DoubleClicked |
+        QAbstractItemView::SelectedClicked |
+        QAbstractItemView::EditKeyPressed
+        );
 
     ui->tableViewLibreria->resizeColumnsToContents();
 }
@@ -96,7 +105,9 @@ void GameLibraryWidget::onAgregarClicked()
     int row = model->rowCount();
     model->insertRow(row);
 
-    // Abrir un diálogo o usar QInputDialog para pedir datos antes de submit
+    // Selecciona la nueva fila y pone foco en la primera columna
+    ui->tableViewLibreria->selectRow(row);
+    ui->tableViewLibreria->edit(model->index(row, 0));
 }
 
 void GameLibraryWidget::onActualizarClicked()
@@ -130,4 +141,13 @@ void GameLibraryWidget::onEliminarClicked()
     } else {
         model->select();
     }
+}
+void GameLibraryWidget::onRecargarClicked()
+{
+    QString tableName = ui->comboBoxTabla->currentText();
+    if (!tableModels.contains(tableName)) return;
+
+    QSqlTableModel* model = tableModels[tableName];
+    model->revertAll();  // Revertir cambios no guardados
+    model->select();     // Recargar desde la base de datos
 }

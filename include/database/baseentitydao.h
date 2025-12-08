@@ -14,11 +14,6 @@ public:
 
     virtual ~BaseEntityDAO() = default;
 
-    // Métodos obligatorios
-    virtual T fromQuery(const QSqlQuery& q) const = 0;
-    virtual void bindInsert(QSqlQuery& q, const T& entity) const = 0;
-    virtual void bindUpdate(QSqlQuery& q, const T& entity) const = 0;
-
     // CRUD
     T getById(int id) const;
     QList<T> getAll() const;
@@ -29,6 +24,11 @@ public:
 protected:
     QString tableName;
     QSqlDatabase& db;
+
+    // Métodos obligatorios
+    virtual T fromQuery(const QSqlQuery& q) const = 0;
+    virtual void bindInsert(QSqlQuery& q, const T& entity) const = 0;
+    virtual void bindUpdate(QSqlQuery& q, const T& entity) const = 0;
 };
 
 /* ------------------------------ */

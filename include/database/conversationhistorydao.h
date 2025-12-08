@@ -10,13 +10,13 @@ class ConversationHistoryDAO : public BaseEntityDAO<ConversationHistory>
 public:
     explicit ConversationHistoryDAO(QSqlDatabase& db);
 
-    ConversationHistory fromQuery(const QSqlQuery& q) const override;
-    void bindInsert(QSqlQuery& q, const ConversationHistory& m) const override;
-    void bindUpdate(QSqlQuery& q, const ConversationHistory& m) const override;
 
     QList<ConversationHistory> getLastMessages(int limit) const;
 
 private:
+    ConversationHistory fromQuery(const QSqlQuery& q) const override;
+    void bindInsert(QSqlQuery& q, const ConversationHistory& m) const override;
+    void bindUpdate(QSqlQuery& q, const ConversationHistory& m) const override;
     // Alias para no repetir tanto nombre
     static inline const QString& T = Constants::Tables::ConversationHist;
 

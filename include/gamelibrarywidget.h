@@ -25,6 +25,7 @@ private slots:
     void onAgregarClicked();
     void onActualizarClicked();
     void onEliminarClicked();
+    void onRecargarClicked();
 
 private:
     Ui::GameLibraryWidget *ui;
@@ -33,7 +34,6 @@ private:
 
     void setupModels();
     void loadTable(const QString& tableName);
-
 };
 
 #endif // GAMELIBRARYWIDGET_H

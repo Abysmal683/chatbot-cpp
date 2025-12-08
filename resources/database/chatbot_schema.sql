@@ -27,22 +27,25 @@ CREATE TABLE IF NOT EXISTS games(
 CREATE TABLE IF NOT EXISTS game_genres (
     game_id INTEGER NOT NULL,
     genre_id INTEGER NOT NULL,
+    PRIMARY KEY(game_id, genre_id),
     FOREIGN KEY(game_id) REFERENCES games(id) ON DELETE CASCADE,
-    FOREIGN KEY(genre_id) REFERENCES genres(id)
+    FOREIGN KEY(genre_id) REFERENCES genres(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS game_platforms (
     game_id INTEGER NOT NULL,
     platform_id INTEGER NOT NULL,
+    PRIMARY KEY(game_id, platform_id),
     FOREIGN KEY(game_id) REFERENCES games(id) ON DELETE CASCADE,
-    FOREIGN KEY(platform_id) REFERENCES platforms(id)
+    FOREIGN KEY(platform_id) REFERENCES platforms(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS game_tags (
     game_id INTEGER NOT NULL,
     tag_id INTEGER NOT NULL,
+    PRIMARY KEY(game_id, tag_id),
     FOREIGN KEY(game_id) REFERENCES games(id) ON DELETE CASCADE,
-    FOREIGN KEY(tag_id) REFERENCES tags(id)
+    FOREIGN KEY(tag_id) REFERENCES tags(id) ON DELETE CASCADE
 );
 
 CREATE INDEX IF NOT EXISTS idx_games_rating ON games(rating);
