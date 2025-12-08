@@ -7,12 +7,12 @@ void DialogueMemory::addMessage(const QString& sender, const QString& text)
 
 void DialogueMemory::addUserMessage(const QString& text)
 {
-    addMessage("user", text);
+    addMessage(C_User, text);
 }
 
 void DialogueMemory::addBotMessage(const QString& text)
 {
-    addMessage("bot", text);
+    addMessage(C_Bot, text);
 }
 
 QList<DialogueMessage> DialogueMemory::getLast(int n) const

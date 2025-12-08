@@ -1,3 +1,4 @@
+//realia el calculo de peso de las reglas con ruleDAO
 #ifndef TFIDFCLASSIFIER_H
 #define TFIDFCLASSIFIER_H
 
@@ -5,41 +6,41 @@
 #include <QStringList>
 #include <QVector>
 #include <QHash>
+#include <QPair>
 
-class TextProcessor; // forward declaration
+class TextProcessor;
+class RulesDAO; // forward declaration
 
 class TFIDFClassifier
 {
 public:
-    explicit TFIDFClassifier(TextProcessor *processor);
+    explicit TFIDFClassifier(TextProcessor *processor, RulesDAO* dao);
 
-    // Cargar documentos
+    // Cargar documentos manualmente (opcional)
     void addDocument(const QString &id, const QString &texto);
     void clear();
 
-    // Reconstruye todos los vectores de TF-IDF
+    // Reconstruye todos los vectores TF-IDF desde reglas activas
     void rebuild();
 
     // Clasificación / búsqueda
-    QString classify(const QString &query) const;                // mejor match
-    QVector<QPair<QString, double>> topN(const QString &query,
-        int n = 3) const;       // top N matches
+    QString classify(const QString &query) const;
+    QVector<QPair<QString, double>> topN(const QString &query, int n = 3) const;
 
 private:
     // Utilidades internas
     QStringList tokenize(const QString &text) const;
     QHash<QString, double> computeTf(const QStringList &tokens) const;
     QHash<QString, double> computeTfidf(const QHash<QString, double> &tf) const;
-    double cosineSim(const QHash<QString, double> &v1,
-        const QHash<QString, double> &v2) const;
+    double cosineSim(const QHash<QString, double> &v1, const QHash<QString, double> &v2) const;
 
-private:
     TextProcessor *processor;
+    RulesDAO* rulesDao; // Puntero al DAO, no ownership
 
-    // Base documentos
+    // Base documentos: id → trigger
     QHash<QString, QString> documents;
 
-    // Vectores TF-IDF normalizados
+    // Vectores TF-IDF normalizados: id → tfidf vector
     QHash<QString, QHash<QString, double>> tfidfVectors;
 
     // Frecuencias de documento: palabra → #documentos donde aparece

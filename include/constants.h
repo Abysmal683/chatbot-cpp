@@ -92,11 +92,15 @@ inline const QString Time    = "timestamp";  // <-- actualizado
 
 /* -------- RULES -------- */
 namespace Rules {
-inline constexpr auto Table    = "rules";
-inline constexpr auto Id       = "id";
-inline constexpr auto Trigger  = "trigger";
-inline constexpr auto Response = "response";
-inline constexpr auto Priority = "priority";
+inline constexpr auto Id         = "id";
+inline constexpr auto Trigger    = "trigger";
+inline constexpr auto Response   = "response";
+inline constexpr auto Priority   = "priority";
+inline constexpr auto Category   = "category";
+inline constexpr auto Source     = "source";
+inline constexpr auto IsActive   = "is_active";
+inline constexpr auto CreatedAt  = "created_at";
+inline constexpr auto UpdatedAt  = "updated_at";
 }
 
 /* -------- KEYWORDS -------- */
@@ -136,7 +140,8 @@ inline const QString Genre      = "genero";
 inline const QString Platform   = "plataforma";
 inline const QString Preference = "preferencia";
 }
-
+inline const QString User = "user";
+inline const QString Bot = "bot";
 } // namespace Constants
 
 #endif // CONSTANTS_H

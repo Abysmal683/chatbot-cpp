@@ -8,23 +8,28 @@ RulesDAO::RulesDAO(QSqlDatabase& db)
 {}
 
 /* ----------------------------------------------------------
-
-* MAPEAR QUERY → Rule
-* ----------------------------------------------------------*/
+ * MAPEAR QUERY → Rule
+ * ----------------------------------------------------------*/
 Rule RulesDAO::fromQuery(const QSqlQuery& q) const {
     Rule r;
     r.id       = q.value(C_Id).toInt();
     r.trigger  = q.value(C_Trigger).toString();
     r.response = q.value(C_Response).toString();
     r.priority = q.value(C_Priority).toInt();
+
+    // Campos opcionales si se agregan en struct Rule
+    // r.category = q.value(C_Category).toString();
+    // r.source   = q.value(C_Source).toString();
+    // r.isActive = q.value(C_IsActive).toBool();
+    // r.createdAt = q.value(C_CreatedAt).toString();
+    // r.updatedAt = q.value(C_UpdatedAt).toString();
+
     return r;
 }
 
 /* ----------------------------------------------------------
-
-* INSERT
-
-* ----------------------------------------------------------*/
+ * INSERT
+ * ----------------------------------------------------------*/
 void RulesDAO::bindInsert(QSqlQuery& q, const Rule& r) const {
     q.prepare(QString("INSERT INTO %1 (%2, %3, %4) "
                       "VALUES (:%2, :%3, :%4)")
@@ -36,10 +41,8 @@ void RulesDAO::bindInsert(QSqlQuery& q, const Rule& r) const {
 }
 
 /* ----------------------------------------------------------
-
-* UPDATE
-
-* ----------------------------------------------------------*/
+ * UPDATE
+ * ----------------------------------------------------------*/
 void RulesDAO::bindUpdate(QSqlQuery& q, const Rule& r) const {
     q.prepare(QString("UPDATE %1 SET "
                       "%2 = :%2, %3 = :%3, %4 = :%4 "
@@ -53,9 +56,8 @@ void RulesDAO::bindUpdate(QSqlQuery& q, const Rule& r) const {
 }
 
 /* ==========================================================
-
-* FUNCIONES ÚTILES
-* ==========================================================*/
+ * FUNCIONES ÚTILES
+ * ==========================================================*/
 QList<Rule> RulesDAO::getByTrigger(const QString& trigger) const {
     QList<Rule> results;
     QSqlQuery q(db);
@@ -92,4 +94,20 @@ Rule RulesDAO::getBestMatch(const QString& trigger) const {
         return {};
     }
     return fromQuery(q);
+}
+
+// ----------------------------------------------------------
+// NUEVA FUNCION: Obtener todas las reglas activas
+// ----------------------------------------------------------
+QList<Rule> RulesDAO::getActiveRules() const {
+    QList<Rule> results;
+    QSqlQuery q(db);
+    q.prepare(QString("SELECT * FROM %1 WHERE %2 = 1 ORDER BY %3 DESC")
+                  .arg(T, C_IsActive, C_Priority));
+    if (!q.exec()) {
+        qWarning() << "Error getActiveRules:" << q.lastError().text();
+        return results;
+    }
+    while (q.next()) results.append(fromQuery(q));
+    return results;
 }

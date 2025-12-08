@@ -1,10 +1,14 @@
 #include "tfindfclassifier.h"
 #include "textprocessor.h"
-
+#include "rulesdao.h"
+#include "rule.h"
 #include <QtMath>
+#include <QSet>
+#include <algorithm>
+#include <qregularexpression.h>
 
-TFIDFClassifier::TFIDFClassifier(TextProcessor *processor)
-    : processor(processor)
+TFIDFClassifier::TFIDFClassifier(TextProcessor *processor, RulesDAO* dao)
+    : processor(processor), rulesDao(dao)
 {
 }
 
@@ -23,11 +27,20 @@ void TFIDFClassifier::clear()
 
 void TFIDFClassifier::rebuild()
 {
-    if (!processor)
+    if (!processor || !rulesDao)
         return;
 
+    // Limpiar datos previos
     tfidfVectors.clear();
     df.clear();
+    documents.clear();
+
+    // Cargar documentos desde reglas activas
+    QList<Rule> activeRules = rulesDao->getActiveRules();
+    for (const Rule& r : activeRules) {
+        documents[r.trigger] = r.response; // trigger como documento
+    }
+
     totalDocs = documents.size();
 
     // 1. Calcular DF (document frequency)
@@ -81,15 +94,13 @@ QVector<QPair<QString, double>> TFIDFClassifier::topN(const QString &query, int 
     auto qtf = computeTf(qTokens);
     auto qtfidf = computeTfidf(qtf);
 
-    // Medir similitud con cada documento
     for (auto it = tfidfVectors.begin(); it != tfidfVectors.end(); ++it) {
         double sim = cosineSim(qtfidf, it.value());
         ranked.append({it.key(), sim});
     }
 
-    // Ordenar por similitud descendente
     std::sort(ranked.begin(), ranked.end(),
-              [](auto &a, auto &b) { return a.second > b.second; });
+              [](const QPair<QString,double> &a, const QPair<QString,double> &b){ return a.second > b.second; });
 
     if (ranked.size() > n)
         ranked.resize(n);
@@ -100,17 +111,14 @@ QVector<QPair<QString, double>> TFIDFClassifier::topN(const QString &query, int 
 QStringList TFIDFClassifier::tokenize(const QString &text) const
 {
     QString t = processor->normalizeText(text);
-    return t.split(' ', Qt::SkipEmptyParts);
+    return t.split(QRegularExpression("\\s+"), Qt::SkipEmptyParts);
 }
 
 QHash<QString, double> TFIDFClassifier::computeTf(const QStringList &tokens) const
 {
     QHash<QString, double> tf;
+    for (const QString &t : tokens) tf[t] += 1.0;
 
-    for (const QString &t : tokens)
-        tf[t] += 1.0;
-
-    // normalizar por longitud del documento
     double total = tokens.size();
     for (auto it = tf.begin(); it != tf.end(); ++it)
         it.value() /= total;
@@ -126,9 +134,7 @@ QHash<QString, double> TFIDFClassifier::computeTfidf(const QHash<QString, double
         const QString &word = it.key();
         double tfVal = it.value();
         double docFreq = df.value(word, 1);
-
         double idf = qLn((double(totalDocs) + 1.0) / (docFreq + 1.0)) + 1.0;
-
         result[word] = tfVal * idf;
     }
 
@@ -136,7 +142,7 @@ QHash<QString, double> TFIDFClassifier::computeTfidf(const QHash<QString, double
 }
 
 double TFIDFClassifier::cosineSim(const QHash<QString, double> &v1,
-    const QHash<QString, double> &v2) const
+                                  const QHash<QString, double> &v2) const
 {
     double dot = 0.0, mag1 = 0.0, mag2 = 0.0;
 
@@ -149,9 +155,6 @@ double TFIDFClassifier::cosineSim(const QHash<QString, double> &v1,
     for (auto it = v2.begin(); it != v2.end(); ++it)
         mag2 += it.value() * it.value();
 
-    double denom = (qSqrt(mag1) * qSqrt(mag2));
-    if (denom == 0)
-        return 0.0;
-
-    return dot / denom;
+    double denom = qSqrt(mag1) * qSqrt(mag2);
+    return denom == 0.0 ? 0.0 : dot / denom;
 }

@@ -1,11 +1,9 @@
 #include "textprocessor.h"
 #include <QRegularExpression>
-#include <QSet>
-#include <QStringList>
 
-// -----------------------------
+// ---------------------------------
 // Constructor: carga stopwords
-// -----------------------------
+// ---------------------------------
 TextProcessor::TextProcessor()
 {
     stopWords = {
@@ -15,64 +13,56 @@ TextProcessor::TextProcessor()
         "tu","su","mi","es","son","ser","hay"
     };
 }
-
-// -----------------------------
+QStringList TextProcessor::process(const QString& text)
+{
+    QString t = normalizeText(text);
+    auto tokens = tokenize(t);
+    tokens = removeStopWords(tokens);
+    return stemWords(tokens);
+}
+// ---------------------------------
 // NORMALIZACIÓN GENERAL
-// -----------------------------
+// ---------------------------------
 QString TextProcessor::normalizeText(const QString &text) const
 {
     QString t = text;
-    t = toLower(t);
+    t = t.toLower();
     t = removeSpecialChars(t);
     return t.simplified();
 }
 
-// -----------------------------
-// MINUSCULAS
-// -----------------------------
-QString TextProcessor::toLower(const QString &text) const
-{
-    return text.toLower();
-}
-
-// -----------------------------
-// TOKENIZAR
-// -----------------------------
+// ---------------------------------
+// TOKENIZAR  (evita limpieza duplicada)
+// ---------------------------------
 QStringList TextProcessor::tokenize(const QString &text) const
 {
-    QString cleaned = removeSpecialChars(text);
-
-    // Separar por espacios
-    QStringList tokens = cleaned.split(
-        QRegularExpression("\\s+"),
-        Qt::SkipEmptyParts
-        );
-
-    return tokens;
+    return text.split(QRegularExpression("\\s+"), Qt::SkipEmptyParts);
 }
 
-// -----------------------------
-// REMOVER STOP WORDS
-// -----------------------------
+// ---------------------------------
+// REMOVER STOP WORDS (seguro)
+// ---------------------------------
 QStringList TextProcessor::removeStopWords(const QStringList &tokens) const
 {
     QStringList filtered;
-    for (const QString &token : tokens)
-        if (!stopWords.contains(token))
-            filtered.append(token);
+    filtered.reserve(tokens.size());
 
+    for (const QString &token : tokens)
+    {
+        QString t = token.toLower();
+        if (!stopWords.contains(t))
+            filtered.append(t);
+    }
     return filtered;
 }
 
-// -----------------------------
-// STEMMING / LEMMATIZACIÓN SIMPLE
-// -----------------------------
+// ---------------------------------
+// STEMMER SIMPLE (mejor validación)
+// ---------------------------------
 QString TextProcessor::stemWord(const QString &word) const
 {
     QString w = word;
 
-    // Ejemplo MUY simplificado de stemmer español
-    // (Sufijos comunes)
     const QStringList suffixes = {
         "mente", "ción", "sión",
         "ando", "iendo",
@@ -82,33 +72,35 @@ QString TextProcessor::stemWord(const QString &word) const
 
     for (const QString &suf : suffixes)
     {
-        if (w.endsWith(suf) && w.length() > suf.length())
+        if (w.endsWith(suf))
         {
-            return w.left(w.length() - suf.length());
+            if (w.length() - suf.length() >= 3)
+                return w.left(w.length() - suf.length());
         }
     }
     return w;
 }
 
-// Procesar lista de tokens
+// ---------------------------------
+// STEM LIST
+// ---------------------------------
 QStringList TextProcessor::stemWords(const QStringList &tokens) const
 {
     QStringList result;
+    result.reserve(tokens.size());
+
     for (const QString &t : tokens)
         result.append(stemWord(t));
 
     return result;
 }
 
-// -----------------------------
-// Remover caracteres especiales
-// -----------------------------
+// ---------------------------------
+// REMOVER CARACTERES ESPECIALES (permitir números)
+// ---------------------------------
 QString TextProcessor::removeSpecialChars(const QString &text) const
 {
     QString cleaned = text;
-
-    // Permitir solo letras y espacios
-    cleaned.replace(QRegularExpression("[^a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]"), " ");
-
-    return cleaned;
+    cleaned.replace(QRegularExpression("[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\\s]"), " ");
+    return cleaned.trimmed();
 }
