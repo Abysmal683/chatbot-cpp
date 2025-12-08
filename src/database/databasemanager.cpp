@@ -1,93 +1,94 @@
 #include "databasemanager.h"
 #include <QStandardPaths>
 #include <QDir>
+#include <QFile>
+#include <QTextStream>
 #include <QSqlError>
 #include <QSqlQuery>
+#include <QDebug>
+
 DataBaseManager::DataBaseManager() {
-    //tipo de sql que se utilizara
     db = QSqlDatabase::addDatabase("QSQLITE");
-    //ubicacion donde se buscara o creara el db
-    QString dbpath = QStandardPaths::writableLocation(
-        QStandardPaths::AppDataLocation)+ "/DataBase_ChatBot.db";
-    //crea una carpeta si no existe
-    QDir dir(QFileInfo(dbpath).path());
-    //si no existe se crea
-    if(!dir.exists()) dir.mkpath(dir.path());
-    db.setDatabaseName(dbpath);
+    QString dbPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/DataBase_ChatBot.db";
+    QDir dir(QFileInfo(dbPath).path());
+    if (!dir.exists()) dir.mkpath(dir.path());
+    db.setDatabaseName(dbPath);
+    qDebug() << "Se inicio ";
 }
-DataBaseManager::~DataBaseManager(){
+
+DataBaseManager::~DataBaseManager() {
     QString name = db.connectionName();
     db.close();
     QSqlDatabase::removeDatabase(name);
 }
 
 DataBaseManager& DataBaseManager::instance() {
-    //la primera ves crea una instancia, la siguiente la reutiliza
     static DataBaseManager instance;
     return instance;
 }
+
 bool DataBaseManager::createTables() {
-    //ubica el schema
     QFile schemaFile(":/resources/database/chatbot_schema.sql");
-    //abre el archivo en modo lectura de texto
     if (!schemaFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
         qCritical() << "No se pudo abrir chatbot_schema.sql desde recursos.";
         return false;
     }
-    //lee todo el contenido y cierra el archivo
+
     QTextStream stream(&schemaFile);
     QString sqlContent = stream.readAll();
     schemaFile.close();
-    //divide los comandos para ejecutarlo 1 a 1 seperados por el ;,puede fallar si ahi ; en comentarios
+
     QSqlQuery q(db);
-    const QStringList commands = sqlContent.split(';', Qt::SkipEmptyParts);
 
     if (!db.transaction()) qWarning() << "No se pudo iniciar transacción";
-    //recorre los comandos y limpia para ejecutar, o captura errores
-    for (const QString& cmd : commands) {
-        QString trimmed = cmd.trimmed();
-        if (trimmed.isEmpty())
-            continue;
 
-        if (!q.exec(trimmed)) {
-            qCritical() << "Error ejecutando SQL:" << trimmed;
-            qCritical() << "Detalle:" << q.lastError().text();
-            db.rollback();
-            return false;
+    const QStringList lines = sqlContent.split('\n', Qt::SkipEmptyParts);
+    QString statement;
+
+    for (QString line : lines) {
+        line = line.trimmed();
+        if (line.startsWith("--") || line.isEmpty()) continue; // ignora comentarios y líneas vacías
+        statement += line + " ";
+        if (line.endsWith(";")) {
+            if (!q.exec(statement)) {
+                qCritical() << "Error ejecutando SQL:" << statement;
+                qCritical() << "Detalle:" << q.lastError().text();
+                db.rollback();
+                return false;
+            }
+            statement.clear();
         }
     }
+
     if (!db.commit()) {
         db.rollback();
         qCritical() << "No se pudo commitear creación de tablas";
         return false;
     }
-    //si todo funciona, tira un qdebug para avisar su estado
+
     qDebug() << "Tablas creadas/verificadas correctamente.";
     return true;
 }
+
 bool DataBaseManager::initialize() {
-    //inicia por primera ves la base de dato
     if (!db.open()) {
         qCritical() << "ERROR al abrir la base de datos:" << db.lastError().text();
         return false;
     }
     return createTables();
 }
+
 QSqlDatabase& DataBaseManager::getDatabase() {
     return db;
 }
-bool DataBaseManager::clearTable(const QString &tableName){
-    //comprobar si esta abierto
-    if(!db.isOpen()) return false;
-    //se crea un querry tipo delete y se ejecuta
+
+bool DataBaseManager::clearTable(const QString &tableName) {
+    if (!db.isOpen()) return false;
     QSqlQuery q(db);
     QString sql = QStringLiteral("DELETE FROM \"%1\"").arg(tableName);
-    //si falla mientras esta ejecutando, alertara
-    if(!q.exec(sql)){
-        qCritical() << "error limpiando tabla: " << tableName <<
-            q.lastError().text();
+    if (!q.exec(sql)) {
+        qCritical() << "error limpiando tabla:" << tableName << q.lastError().text();
         return false;
     }
-    //si funciona, retornara true
     return true;
 }

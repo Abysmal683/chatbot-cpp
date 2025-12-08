@@ -1,5 +1,5 @@
 #include "conversationhistorydao.h"
-
+#include <QDateTime>
 ConversationHistoryDAO::ConversationHistoryDAO(QSqlDatabase& db)
     : BaseEntityDAO<ConversationHistory>(T, db)
 {}
@@ -19,14 +19,19 @@ ConversationHistory ConversationHistoryDAO::fromQuery(const QSqlQuery& q) const 
 // ----------------------------------------------
 //   INSERT
 // ----------------------------------------------
+
+
 void ConversationHistoryDAO::bindInsert(QSqlQuery& q, const ConversationHistory& m) const
 {
+    QString timestamp = QDateTime::currentDateTime().toString(Qt::ISODate);
+
     q.prepare(QStringLiteral(
-                  "INSERT INTO %1 (%2, %3) VALUES (:u, :b)"
-                  ).arg(T, C_UserMsg, C_BotMsg));
+                  "INSERT INTO %1 (%2, %3, %4) VALUES (:u, :b, :t)"
+                  ).arg(T, C_UserMsg, C_BotMsg, C_Time));
 
     q.bindValue(":u", m.user_message);
     q.bindValue(":b", m.bot_message);
+    q.bindValue(":t", timestamp);
 }
 
 // ----------------------------------------------

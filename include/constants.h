@@ -82,11 +82,12 @@ inline const QString CreatedAt    = "created_at";
 }
 
 /* -------- CONVERSATION HISTORY -------- */
+/* -------- CONVERSATION HISTORY -------- */
 namespace ConversationHistory {
 inline const QString Id      = "id";
 inline const QString UserMsg = "user_message";
 inline const QString BotMsg  = "bot_message";
-inline const QString Time    = "current_timestamp";
+inline const QString Time    = "timestamp";  // <-- actualizado
 }
 
 /* -------- RULES -------- */

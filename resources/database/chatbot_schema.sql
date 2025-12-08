@@ -1,45 +1,44 @@
-
 PRAGMA foreign_keys = ON;
-CREATE TABLE genres (
+
+CREATE TABLE IF NOT EXISTS genres (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT UNIQUE NOT NULL
 );
-CREATE TABLE platforms (
+
+CREATE TABLE IF NOT EXISTS platforms (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT UNIQUE NOT NULL
 );
-CREATE TABLE tags (
+
+CREATE TABLE IF NOT EXISTS tags (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT UNIQUE NOT NULL
 );
---TABLA de los videojuegos registrados
 
 CREATE TABLE IF NOT EXISTS games(
-   	id INTEGER PRIMARY KEY AUTOINCREMENT,    -- id 
-
-    title TEXT UNIQUE NOT NULL,              -- Nombre del videojuego
-
-    rating REAL CHECK (rating BETWEEN 1 AND 5),  -- valoracion del Videojuego
-
-    description TEXT,       -- Descripcion del Videojuego
-    
-    avg_playtime_minutes INTEGER, --duraccion del videojuego promedio
-    
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT UNIQUE NOT NULL,
+    rating REAL CHECK (rating BETWEEN 1 AND 5),
+    description TEXT,
+    avg_playtime_minutes INTEGER,
     created_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
-CREATE TABLE game_genres (
+
+CREATE TABLE IF NOT EXISTS game_genres (
     game_id INTEGER NOT NULL,
     genre_id INTEGER NOT NULL,
     FOREIGN KEY(game_id) REFERENCES games(id) ON DELETE CASCADE,
     FOREIGN KEY(genre_id) REFERENCES genres(id)
 );
-CREATE TABLE game_platforms (
+
+CREATE TABLE IF NOT EXISTS game_platforms (
     game_id INTEGER NOT NULL,
     platform_id INTEGER NOT NULL,
     FOREIGN KEY(game_id) REFERENCES games(id) ON DELETE CASCADE,
     FOREIGN KEY(platform_id) REFERENCES platforms(id)
 );
-CREATE TABLE game_tags (
+
+CREATE TABLE IF NOT EXISTS game_tags (
     game_id INTEGER NOT NULL,
     tag_id INTEGER NOT NULL,
     FOREIGN KEY(game_id) REFERENCES games(id) ON DELETE CASCADE,
@@ -47,108 +46,82 @@ CREATE TABLE game_tags (
 );
 
 CREATE INDEX IF NOT EXISTS idx_games_rating ON games(rating);
--- FTS5 virtual table para busquedas textuales rapidas (titulo, descripcion)
-CREATE VIRTUAL TABLE IF NOT EXISTS games_fts 
+
+CREATE VIRTUAL TABLE IF NOT EXISTS games_fts
 USING fts5(
-    title, 
-    description, 
-    content='games', 
+    title,
+    description,
+    content='games',
     content_rowid='id'
 );
---Tabla de memoria a largo plazo
-CREATE TABLE IF NOT EXISTS memory_long_term(
-   	id INTEGER PRIMARY KEY AUTOINCREMENT,    -- id
 
-    key TEXT NOT NULL,              -- etiqueda del tema
-    
-    value TEXT NOT NULL,             -- dato guardado
-    
-    importance INTEGER CHECK (importance BETWEEN 1 AND 10) DEFAULT 5,			-- importancia dela conversacion
-    
-    created_at TEXT NOT NULL DEFAULT (datetime('now')) --ISO8601, YYYY - MM - DD fecha guardada de la conversacion
+CREATE TABLE IF NOT EXISTS memory_long_term(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    key TEXT NOT NULL,
+    value TEXT NOT NULL,
+    importance INTEGER CHECK (importance BETWEEN 1 AND 10) DEFAULT 5,
+    created_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
 
 CREATE INDEX IF NOT EXISTS idx_memory_long_term_key ON memory_long_term(key);
--- tabla de memoria corto plazo
+
 CREATE TABLE IF NOT EXISTS memory_short_term(
-   	id INTEGER PRIMARY KEY AUTOINCREMENT,    -- id
-    
-    value TEXT NOT NULL,             -- conversacion guardada
-   
-    expires_at TEXT ,		-- tiempo de vida
-    
-    related_intent TEXT ,	-- intencion de la conversacion
-    
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    value TEXT NOT NULL,
+    expires_at TEXT,
+    related_intent TEXT,
     created_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
 
 CREATE INDEX IF NOT EXISTS idx_memory_short_term_expires ON memory_short_term(expires_at);
 
--- tabla de historial conversado
 CREATE TABLE IF NOT EXISTS conversation_history(
-   	id INTEGER PRIMARY KEY AUTOINCREMENT,    -- id
-    
-    user_message TEXT,             -- conversacion guardada del usuario
-   
-    bot_message TEXT,			-- conversacion guardada del bot
-    
-    current_timestamp TEXT NOT NULL DEFAULT (datetime('now'))		-- Tiempo dela conversacion --ISO8601, YYYY - MM - DDThh : mm : ss
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_message TEXT,
+    bot_message TEXT,
+    timestamp TEXT NOT NULL
 );
 
-CREATE INDEX IF NOT EXISTS idx_conversation_history_time ON conversation_history(current_timestamp);
--- tabla de reglas
+CREATE INDEX IF NOT EXISTS idx_conversation_history_time ON conversation_history(timestamp);
+
 CREATE TABLE IF NOT EXISTS rules(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-
-    trigger TEXT NOT NULL,                 -- lo que activa la regla
-    response TEXT NOT NULL,                -- lo que devuelve la IA
-    priority INTEGER NOT NULL DEFAULT 0,   -- peso
-
-    category TEXT DEFAULT NULL,            -- (opcional) saludo, error, comando
-    source TEXT DEFAULT 'manual',          -- manual / system / auto-learned
-    is_active INTEGER NOT NULL DEFAULT 1,  -- 1 = activa, 0 = deshabilitada
-
+    trigger TEXT NOT NULL,
+    response TEXT NOT NULL,
+    priority INTEGER NOT NULL DEFAULT 0,
+    category TEXT DEFAULT NULL,
+    source TEXT DEFAULT 'manual',
+    is_active INTEGER NOT NULL DEFAULT 1,
     created_at TEXT DEFAULT (datetime('now')),
     updated_at TEXT DEFAULT (datetime('now')),
-
-    -- evita duplicados sin sentido
     UNIQUE(trigger, response)
 );
 
 CREATE INDEX IF NOT EXISTS idx_rules_trigger ON rules(trigger);
---tabla de palabras claves
-CREATE TABLE IF NOT EXISTS keywords(
-   	id INTEGER PRIMARY KEY AUTOINCREMENT,    -- id de la conversacion
-    
-    keyword TEXT NOT NULL,             -- palabra clave
-   
-    category TEXT NOT NULL,		-- tipo de peticion
 
-    UNIQUE(keyword,category)
+CREATE TABLE IF NOT EXISTS keywords(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    keyword TEXT NOT NULL,
+    category TEXT NOT NULL,
+    UNIQUE(keyword, category)
 );
 
 CREATE INDEX IF NOT EXISTS idx_keywords_keyword ON keywords(keyword);
--- tabla de preferencias
+
 CREATE TABLE IF NOT EXISTS user_preferences(
-   	id INTEGER PRIMARY KEY AUTOINCREMENT,    -- id
-    
-    key TEXT NOT NULL,             -- conversacion extraida
-   
-    value TEXT NOT NULL,			-- peso del dato
-    
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    key TEXT NOT NULL,
+    value TEXT NOT NULL,
     updated_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
 
 CREATE INDEX IF NOT EXISTS idx_user_preferences_key ON user_preferences(key);
 
--- Tabla de logs (opcional pero util)
 CREATE TABLE IF NOT EXISTS logs (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    
-    level TEXT NOT NULL,                       -- INFOWARNINGERROR
-    
+    level TEXT NOT NULL,
     message TEXT NOT NULL,
-    
     created_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
+
 CREATE INDEX IF NOT EXISTS idx_logs_level ON logs(level);

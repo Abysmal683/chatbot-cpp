@@ -12,15 +12,16 @@ int main(int argc, char *argv[])
     // -------------------------------
     // Inicializar Base de Datos
     // -------------------------------
-    if (!DataBaseManager::instance().initialize()) {
-        qCritical() << "No se pudo inicializar la base de datos. Saliendo.";
+    DataBaseManager& dbManager = DataBaseManager::instance();
+    if (!dbManager.initialize()) {
+        qCritical() << "No se pudo inicializar la base de datos. Saliendo...";
         return -1;
     }
 
     // -------------------------------
     // Configurar traducciones
     // -------------------------------
-    QTranslator translator;
+    /*QTranslator translator;
     QString locale = QLocale::system().name();
     QString path = QApplication::applicationDirPath() + "/translations";
     QString file = QString("ChatBot_%1.qm").arg(locale);
@@ -30,7 +31,7 @@ int main(int argc, char *argv[])
         qDebug() << "Traducción cargada: " << path << "/" << file;
     } else {
         qWarning() << "No se pudo cargar traducción:" << path << "/" << file;
-    }
+    }*/
 
     // -------------------------------
     // Mostrar ventana principal
