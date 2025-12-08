@@ -17,11 +17,6 @@ public:
             GameGenresDAO& genreRel,
             GamePlatformsDAO& platformRel);
 
-    // Implementaciones obligatorias
-    Game fromQuery(const QSqlQuery& q) const override;
-    void bindInsert(QSqlQuery& q, const Game& g) const override;
-    void bindUpdate(QSqlQuery& q, const Game& g) const override;
-
     // Métodos de acceso completo (incluyen relaciones)
     Game getFull(int id) const;
     QList<Game> getAllFull() const;
@@ -30,6 +25,11 @@ private:
     GameTagsDAO& tagRelation;
     GameGenresDAO& genreRelation;
     GamePlatformsDAO& platformRelation;
+
+    // Implementaciones obligatorias
+    Game fromQuery(const QSqlQuery& q) const override;
+    void bindInsert(QSqlQuery& q, const Game& g) const override;
+    void bindUpdate(QSqlQuery& q, const Game& g) const override;
 
     // Alias inline para facilitar el uso en .cpp
     static inline const QString& T = Constants::Tables::Games;

@@ -9,8 +9,6 @@ class ConversationHistoryDAO : public BaseEntityDAO<ConversationHistory>
 {
 public:
     explicit ConversationHistoryDAO(QSqlDatabase& db);
-
-
     QList<ConversationHistory> getLastMessages(int limit) const;
 
 private:

@@ -10,17 +10,18 @@ class MemoryLongTermDAO : public BaseEntityDAO<MemoryLongTerm>
 public:
     explicit MemoryLongTermDAO(QSqlDatabase& db);
 
-    // Implementación obligatoria
-    MemoryLongTerm fromQuery(const QSqlQuery& q) const override;
-    void bindInsert(QSqlQuery& q, const MemoryLongTerm& m) const override;
-    void bindUpdate(QSqlQuery& q, const MemoryLongTerm& m) const override;
-
     // Funciones adicionales
     QList<MemoryLongTerm> findByKey(const QString& key) const;
     QList<MemoryLongTerm> findImportant(int minImportance) const;
     QList<QString> listKeys() const;
 
 private:
+
+    // Implementación obligatoria
+    MemoryLongTerm fromQuery(const QSqlQuery& q) const override;
+    void bindInsert(QSqlQuery& q, const MemoryLongTerm& m) const override;
+    void bindUpdate(QSqlQuery& q, const MemoryLongTerm& m) const override;
+
     // alias inline
     static inline const QString& T        = Constants::Tables::MemoryLongTerm;
 

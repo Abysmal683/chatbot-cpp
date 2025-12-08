@@ -10,11 +10,6 @@ class MemoryShortTermDAO : public BaseEntityDAO<MemoryShortTerm>
 public:
     explicit MemoryShortTermDAO(QSqlDatabase& db);
 
-    // Implementaciones BaseEntityDAO
-    MemoryShortTerm fromQuery(const QSqlQuery& q) const override;
-    void bindInsert(QSqlQuery& q, const MemoryShortTerm& m) const override;
-    void bindUpdate(QSqlQuery& q, const MemoryShortTerm& m) const override;
-
     // --- FUNCIONES ÚTILES ---
     bool removeExpired() const;                       // elimina memorias vencidas
     QList<MemoryShortTerm> getValid() const;          // solo memorias vigentes
@@ -22,6 +17,12 @@ public:
     void extendLifetime(int id, int minutes) const;   // extiende expiración
 
 private:
+
+    // Implementaciones BaseEntityDAO
+    MemoryShortTerm fromQuery(const QSqlQuery& q) const override;
+    void bindInsert(QSqlQuery& q, const MemoryShortTerm& m) const override;
+    void bindUpdate(QSqlQuery& q, const MemoryShortTerm& m) const override;
+
     // inlines (alias de tabla / columnas)
     static inline const QString& T  = Constants::Tables::MemoryShortTerm;
 

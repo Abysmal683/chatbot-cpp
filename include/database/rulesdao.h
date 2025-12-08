@@ -15,11 +15,12 @@ public:
     QList<Rule> getByPriority(int minPriority) const;
     Rule getBestMatch(const QString& trigger) const;
 
+
+private:
     Rule fromQuery(const QSqlQuery& q) const override;
     void bindInsert(QSqlQuery& q, const Rule& r) const override;
     void bindUpdate(QSqlQuery& q, const Rule& r) const override;
 
-private:
     /* ALIAS USADOS POR EL ESTÁNDAR */
     const QString T  = Constants::Tables::Rules;
     const QString C_Id       = Constants::Columns::Rules::Id;
