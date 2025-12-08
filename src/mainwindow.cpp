@@ -3,6 +3,7 @@
 #include "welcomewidget.h"
 #include "chatwidget.h"
 #include "gamelibrarywidget.h"
+#include "databasemanager.h"
 #include <QMenuBar>
 #include <QAction>
 #include <QVBoxLayout>
@@ -25,7 +26,8 @@ void MainWindow::setupStacked(){
     stack = new QStackedWidget(this);
     welcomeWidget = new WelcomeWidget(this);
     chatWidget = new ChatWidget(this);
-    gameLibraryWidget = new GameLibraryWidget(this);
+
+    gameLibraryWidget = new GameLibraryWidget(DataBaseManager::instance().getDatabase(),this);
     //se agregan los widgets al stacked e indica el primero
     stack->addWidget(welcomeWidget);
     stack->addWidget(chatWidget);

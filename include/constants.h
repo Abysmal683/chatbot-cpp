@@ -91,10 +91,11 @@ inline const QString Time    = "current_timestamp";
 
 /* -------- RULES -------- */
 namespace Rules {
-inline const QString Id       = "id";
-inline const QString Trigger  = "trigger";
-inline const QString Response = "response";
-inline const QString Priority = "priority";
+inline constexpr auto Table    = "rules";
+inline constexpr auto Id       = "id";
+inline constexpr auto Trigger  = "trigger";
+inline constexpr auto Response = "response";
+inline constexpr auto Priority = "priority";
 }
 
 /* -------- KEYWORDS -------- */

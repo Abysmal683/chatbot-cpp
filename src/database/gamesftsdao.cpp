@@ -1,28 +1,45 @@
 #include "gamesftsdao.h"
-#include <QSqlError>
-#include <QDebug>
 
-GamesFtsDAO::GamesFtsDAO(QSqlDatabase& db) : db(db)
+GamesFtsDAO::GamesFtsDAO(QSqlDatabase& db) : db(db) {}
+
+// ---------------------------------------------------------
+// MAPEO → Game
+// ---------------------------------------------------------
+QList<Game> GamesFtsDAO::mapQueryToGames(QSqlQuery& q) const
 {
+    QList<Game> results;
+
+    while (q.next()) {
+        Game g;
+        g.id          = q.value(C_Id).toInt();
+        g.title       = q.value(C_Title).toString();
+        g.rating      = q.value(C_Rating).toInt();
+        g.description = q.value(C_Description).toString();
+        g.avgPlaytime = q.value(C_AvgPlay).toInt();
+        // tags/genres/platforms se pueden cargar después si se desea
+        results.append(g);
+    }
+
+    return results;
+
 }
 
-QList<Game> GamesFtsDAO::search(const QString &term)
+// ---------------------------------------------------------
+// Búsqueda FTS general
+// ---------------------------------------------------------
+QList<Game> GamesFtsDAO::search(const QString &term) const
 {
     QSqlQuery q(db);
 
-    q.prepare(R"(
-        SELECT
-            g.id,
-            g.title,
-            g.rating,
-            g.description,
-            g.avg_playtime_minutes
-        FROM games_fts f
-        JOIN games g ON g.id = f.content_rowid
-        WHERE f MATCH :term
-        ORDER BY bm25(f)
-    )");
+    QString sql = QString(R"(
+    SELECT g.%1, g.%2, g.%3, g.%4, g.%5
+    FROM %6 f
+    JOIN %7 g ON g.%1 = f.content_rowid
+    WHERE f MATCH :term
+    ORDER BY bm25(f)
+)").arg(C_Id, C_Title, C_Rating, C_Description, C_AvgPlay, T_Fts, T_Games);
 
+    q.prepare(sql);
     q.bindValue(":term", term);
 
     if (!q.exec()) {
@@ -30,35 +47,21 @@ QList<Game> GamesFtsDAO::search(const QString &term)
     }
 
     return mapQueryToGames(q);
+
 }
 
-QList<Game> GamesFtsDAO::searchTitle(const QString &term)
+// ---------------------------------------------------------
+// Búsqueda por título
+// ---------------------------------------------------------
+QList<Game> GamesFtsDAO::searchTitle(const QString &term) const
 {
     return search(QString("title:%1").arg(term));
 }
 
-QList<Game> GamesFtsDAO::searchDescription(const QString &term)
+// ---------------------------------------------------------
+// Búsqueda por descripción
+// ---------------------------------------------------------
+QList<Game> GamesFtsDAO::searchDescription(const QString &term) const
 {
     return search(QString("description:%1").arg(term));
-}
-
-QList<Game> GamesFtsDAO::mapQueryToGames(QSqlQuery &q)
-{
-    QList<Game> results;
-
-    while (q.next()) {
-        Game g;
-
-        g.id                   = q.value(0).toInt();
-        g.title                = q.value(1).toString();
-        g.rating               = q.value(2).toInt();
-        g.description          = q.value(3).toString();
-        g.avg_playtime_minutes = q.value(4).toInt();
-
-        // tags, genres, platforms → se cargan luego por otros DAO N-N
-
-        results.append(g);
-    }
-
-    return results;
 }

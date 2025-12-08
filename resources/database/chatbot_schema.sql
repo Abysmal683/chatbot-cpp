@@ -98,13 +98,21 @@ CREATE TABLE IF NOT EXISTS conversation_history(
 CREATE INDEX IF NOT EXISTS idx_conversation_history_time ON conversation_history(current_timestamp);
 -- tabla de reglas
 CREATE TABLE IF NOT EXISTS rules(
-   	id INTEGER PRIMARY KEY AUTOINCREMENT,    -- id
-    
-    trigger TEXT NOT NULL,             -- palabra clave
-   
-    response TEXT NOT NULL,			-- repuesta indicada
-    
-    priority INTEGER NOT NULL DEFAULT 0		-- peso de la repuesta
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+    trigger TEXT NOT NULL,                 -- lo que activa la regla
+    response TEXT NOT NULL,                -- lo que devuelve la IA
+    priority INTEGER NOT NULL DEFAULT 0,   -- peso
+
+    category TEXT DEFAULT NULL,            -- (opcional) saludo, error, comando
+    source TEXT DEFAULT 'manual',          -- manual / system / auto-learned
+    is_active INTEGER NOT NULL DEFAULT 1,  -- 1 = activa, 0 = deshabilitada
+
+    created_at TEXT DEFAULT (datetime('now')),
+    updated_at TEXT DEFAULT (datetime('now')),
+
+    -- evita duplicados sin sentido
+    UNIQUE(trigger, response)
 );
 
 CREATE INDEX IF NOT EXISTS idx_rules_trigger ON rules(trigger);

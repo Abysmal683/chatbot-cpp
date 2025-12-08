@@ -28,7 +28,7 @@ DataBaseManager& DataBaseManager::instance() {
 }
 bool DataBaseManager::createTables() {
     //ubica el schema
-    QFile schemaFile(":/database/chatbot_schema.sql");
+    QFile schemaFile(":/resources/database/chatbot_schema.sql");
     //abre el archivo en modo lectura de texto
     if (!schemaFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
         qCritical() << "No se pudo abrir chatbot_schema.sql desde recursos.";

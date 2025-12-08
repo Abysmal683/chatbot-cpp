@@ -1,56 +1,62 @@
 #include "userpreferencedao.h"
 
+/* ============================================================
+ *  CONSTRUCTOR
+ * ============================================================ */
 UserPreferenceDAO::UserPreferenceDAO(QSqlDatabase& db)
-    : BaseEntityDAO<UserPreference>("user_preferences", db)
+    : BaseEntityDAO<UserPreference>(T, db)
 {}
 
-// ---------------------------------------------------------
-//  MAPEO → struct UserPreference
-// ---------------------------------------------------------
+/* ============================================================
+ *  MAPEO → UserPreference
+ * ============================================================ */
 UserPreference UserPreferenceDAO::fromQuery(const QSqlQuery& q) const
 {
     UserPreference u;
-    u.id         = q.value("id").toInt();
-    u.key        = q.value("key").toString();
-    u.value      = q.value("value").toString();
-    u.updated_at = q.value("updated_at").toString();
+    u.id         = q.value(C_Id).toInt();
+    u.key        = q.value(C_Key).toString();
+    u.value      = q.value(C_Value).toString();
+    u.updated_at = q.value(C_UpdatedAt).toString();
     return u;
 }
 
-// ---------------------------------------------------------
-//  INSERT
-// ---------------------------------------------------------
+/* ============================================================
+ *  INSERT
+ * ============================================================ */
 void UserPreferenceDAO::bindInsert(QSqlQuery& q, const UserPreference& m) const
 {
-    q.prepare("INSERT INTO user_preferences (key, value, updated_at) "
-              "VALUES (:key, :value, datetime('now'))");
+    q.prepare(QString("INSERT INTO %1 (%2, %3, %4) "
+                      "VALUES (:%2, :%3, datetime('now'))")
+                  .arg(T, C_Key, C_Value, C_UpdatedAt));
 
-    q.bindValue(":key", m.key);
-    q.bindValue(":value", m.value);
+    q.bindValue(QString(":%1").arg(C_Key),   m.key);
+    q.bindValue(QString(":%1").arg(C_Value), m.value);
 }
 
-// ---------------------------------------------------------
-//  UPDATE
-// ---------------------------------------------------------
+/* ============================================================
+ *  UPDATE
+ * ============================================================ */
 void UserPreferenceDAO::bindUpdate(QSqlQuery& q, const UserPreference& m) const
 {
-    q.prepare("UPDATE user_preferences "
-              "SET key = :key, value = :value, updated_at = datetime('now') "
-              "WHERE id = :id");
+    q.prepare(QString("UPDATE %1 SET %2 = :%2, %3 = :%3, %4 = datetime('now') "
+                      "WHERE %5 = :%5")
+                  .arg(T, C_Key, C_Value, C_UpdatedAt, C_Id));
 
-    q.bindValue(":key", m.key);
-    q.bindValue(":value", m.value);
-    q.bindValue(":id", m.id);
+    q.bindValue(QString(":%1").arg(C_Key),   m.key);
+    q.bindValue(QString(":%1").arg(C_Value), m.value);
+    q.bindValue(QString(":%1").arg(C_Id),    m.id);
 }
 
-// ---------------------------------------------------------
-//  EXTRA
-// ---------------------------------------------------------
+/* ============================================================
+ *  EXTRA: BUSCAR POR CLAVE
+ * ============================================================ */
 UserPreference UserPreferenceDAO::getByKey(const QString& key) const
 {
     QSqlQuery q(db);
-    q.prepare("SELECT * FROM user_preferences WHERE key = :k");
-    q.bindValue(":k", key);
+
+    q.prepare(QString("SELECT * FROM %1 WHERE %2 = :key")
+                  .arg(T, C_Key));
+    q.bindValue(":key", key);
 
     if (!q.exec() || !q.next())
         return {};
@@ -58,14 +64,18 @@ UserPreference UserPreferenceDAO::getByKey(const QString& key) const
     return fromQuery(q);
 }
 
+/* ============================================================
+ *  EXTRA: EXISTS()
+ * ============================================================ */
 bool UserPreferenceDAO::exists(const QString& key) const
 {
     QSqlQuery q(db);
-    q.prepare("SELECT COUNT(*) FROM user_preferences WHERE key = :k");
-    q.bindValue(":k", key);
 
-    if (!q.exec())
-        return false;
+    q.prepare(QString("SELECT COUNT(*) FROM %1 WHERE %2 = :key")
+                  .arg(T, C_Key));
+    q.bindValue(":key", key);
+
+    if (!q.exec()) return false;
 
     return q.next() && q.value(0).toInt() > 0;
 }
