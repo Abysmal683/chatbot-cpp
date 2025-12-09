@@ -7,22 +7,18 @@
 class DialogueMemory;
 class ConversationHistoryDAO;
 class LongTermStore;
-class IntentClassifier;
-class KeywordDetector;
 
 class ContextBuilder
 {
 public:
     ContextBuilder(DialogueMemory* sessionMemory,
                    ConversationHistoryDAO* historyDao,
-                   LongTermStore* longTermStore,
-                   IntentClassifier* intentClassifier,
-                   KeywordDetector* keywordDetector);
+                   LongTermStore* longTermStore);
 
     // Construye el contexto final para la IA
     QString buildContext(const QString& userMessage,
-                         const QString& intentId = "",
-                         const QStringList& detectedKeywords = {},
+                         const QString& intstr,
+                         const QStringList &kws,
                          bool includeMemory = true,
                          bool includeHistory = true,
                          int historyMessages = 5) const;
@@ -31,8 +27,6 @@ private:
     DialogueMemory* sessionMemory;
     ConversationHistoryDAO* historyDao;
     LongTermStore* longTermStore;
-    IntentClassifier* intentClassifier;
-    KeywordDetector* keywordDetector;
 
     QString buildMemorySection() const;
     QString buildHistorySection(int nMessages) const;

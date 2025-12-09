@@ -25,7 +25,7 @@ QVector<QString> KeywordDetector::detectar(const QString &texto,const QStringLis
     qDebug() << "[KeywordDetector] dentro de dectectar";
     QVector<QString> encontrados;
 
-    if (texto.isEmpty())
+    if (texto.isEmpty() || tokens.isEmpty())
         return encontrados;
 
     QSet<QString> c_tokens(tokens.begin(), tokens.end());

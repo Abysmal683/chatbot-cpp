@@ -60,7 +60,7 @@ AIEngine::AIEngine()
     // --- 3. Módulos básicos --- //
     qDebug() << "[AIEngine] Inicializando módulos básicos";
     textProcessor   = std::make_unique<TextProcessor>();
-    tfidf           = std::make_unique<TFIDFClassifier>(textProcessor.get(), rulesDao.get(), tfindDao.get());
+    tfidf           = std::make_unique<TFIDFClassifier>(rulesDao.get(), tfindDao.get());
     sessionMemory   = std::make_unique<DialogueMemory>();
     keywordDetector = std::make_unique<KeywordDetector>();
     // Obtener todas las keywords desde la base de datos
@@ -87,10 +87,7 @@ AIEngine::AIEngine()
     contextBuilder = std::make_unique<ContextBuilder>(
         sessionMemory.get(),
         historyDao.get(),
-        longTermStore.get(),
-        intentClassifier.get(),
-        keywordDetector.get()
-        );
+        longTermStore.get());
 
     // --- 7. RecommendationEngine --- //
     recommendationEngine = std::make_unique<RecommendationEngine>(
@@ -131,7 +128,7 @@ QString AIEngine::process(const QString& userInput,
     ensureInitialized();
     qDebug() << "entrada exitosa en procces, guardando input" ;
     QString input = textProcessor->normalizeText(userInput);
-
+    QStringList tokens = textProcessor->tokenize(userInput);
     if (sessionMemory)
         sessionMemory->addUserMessage(input);
     qDebug() << "memoria almacenada en session memory" ;
@@ -151,7 +148,7 @@ QString AIEngine::process(const QString& userInput,
     }
     else{
         qDebug() << "[AiEngine]solicitando una respuesta desde response generator -> generate response" ;
-        resp = responseGenerator->generateResponse(input, includeMemory, includeHistory, historyMessages);
+        resp = responseGenerator->generateResponse(input,tokens, includeMemory, includeHistory, historyMessages);
         qDebug() << "[AiEngine]se consiguio una repuesta de generate response" ;
     }
     qDebug() << "guardar historial persistente" ;

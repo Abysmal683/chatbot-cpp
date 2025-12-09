@@ -23,7 +23,8 @@ GameLibraryWidget::GameLibraryWidget(QSqlDatabase& db, QWidget *parent)
         Constants::Tables::UserPreferences,
         Constants::Tables::Logs,
         Constants::Tables::MemoryLongTerm,
-        Constants::Tables::MemoryShortTerm
+        Constants::Tables::MemoryShortTerm,
+        Constants::Tables::ConversationHist
 
     });
 

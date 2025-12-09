@@ -7,15 +7,15 @@
 #include <QVector>
 #include <QHash>
 #include <QPair>
+#include <qregularexpression.h>
 //carga, guarda, y crea los pesos de las rules con ruledao y tfindao
-class TextProcessor;
 class RulesDAO; // forward declaration
 class TFIDFVectorDAO;
 
 class TFIDFClassifier
 {
 public:
-    explicit TFIDFClassifier(TextProcessor *processor, RulesDAO* rules,TFIDFVectorDAO* vector);
+    explicit TFIDFClassifier(RulesDAO* rules,TFIDFVectorDAO* vector);
 
     // Cargar documentos manualmente (opcional)
     void addDocument(const QString &id, const QString &texto);
@@ -25,8 +25,8 @@ public:
     void rebuild();
     void rebuildIfNeeded();
     // Clasificación / búsqueda
-    QString classify(const QString &query) const;
-    QVector<QPair<QString, double>> topN(const QString &query, int n = 3) const;
+    QString classify(const QStringList &tokens) const;
+    QVector<QPair<QString, double>> topN(const QStringList &tokens, int n = 3) const;
 private:
     int rulesVersion = 0; // versión de las reglas
     // Utilidades internas
@@ -34,7 +34,6 @@ private:
     QHash<QString, double> computeTfidf(const QHash<QString, double> &tf) const;
     double cosineSim(const QHash<QString, double> &v1, const QHash<QString, double> &v2) const;
 
-    TextProcessor *processor;
     RulesDAO* rulesDao; // Puntero al DAO, no ownership
     TFIDFVectorDAO* vecDao;
     // Base documentos: id → trigger
@@ -47,6 +46,9 @@ private:
     QHash<QString, int> df;
 
     int totalDocs = 0;
+    QStringList tokenize(const QString &text) {
+        return text.split(QRegularExpression("\\s+"), Qt::SkipEmptyParts);
+    }
 };
 
 #endif // TFIDFCLASSIFIER_H

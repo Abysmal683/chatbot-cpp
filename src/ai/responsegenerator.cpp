@@ -38,6 +38,7 @@ QString ResponseGenerator::generateFromRule(const QString& userInput)
 // Generador general
 // ---------------------------------------------------------
 QString ResponseGenerator::generateResponse(const QString& userInput,
+                                            const QStringList& tokens,
                                             bool includeMemory,
                                             bool includeHistory,
                                             int historyMessages)
@@ -50,12 +51,8 @@ QString ResponseGenerator::generateResponse(const QString& userInput,
     qDebug() << "[ResponseGenerator] determinando intencion y keyword" ;
     QString intentStr = intentClassifier ? intentClassifier->classify(userInput).intent : "none";
     qDebug() << "[ResponseGenerator]intenciones obtenidas de intent classifier" ;
-    QStringList kws;
-    if (keywordDetector){
-        qDebug() << "[ResponseGenerator]solicitando a keywordDectector->dectectar" ;
-        kws = keywordDetector->detectar(userInput);
+    QStringList kws = keywordDetector ? keywordDetector->detectar(userInput,tokens): QStringList();
         qDebug() << "[ResponseGenerator]respuesta obtenida de keyword dectector" ;
-    }
     qDebug() << "[ResponseGenerator] construyendo contexto con contextbuilder->buildcontext" ;
     // Construir contexto completo usando el nuevo ContextBuilder
     QString context = contextBuilder->buildContext(userInput,

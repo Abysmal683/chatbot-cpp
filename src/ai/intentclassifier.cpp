@@ -30,13 +30,12 @@ IntentResult IntentClassifier::classify(const QString &userText) const
     // ---------------------------
     // 1️ Normalización centralizada
     // ---------------------------
-    QString normalizedText = userText;
-    if (tp) { // asumimos que KeywordDetector tiene acceso al TextProcessor
-        normalizedText = tp->normalizeText(userText);
-    }
+      QString  normalizedText = tp ? tp->normalizeText(userText):userText;
+      QStringList tokens = tp ? tp->tokenize(userText):QStringList();
+
 
     // ---------------------------
-    // 2️⃣Reglas duras
+    // 2️Reglas duras
     // ---------------------------
     if (rules) {
         QString r = rules->match(normalizedText);
@@ -51,7 +50,7 @@ IntentResult IntentClassifier::classify(const QString &userText) const
     // 3️ Keywords
     // ---------------------------
     if (kd) {
-        QVector<QString> encontrados = kd->detectar(normalizedText);
+        const QVector<QString> encontrados = kd->detectar(normalizedText,tokens);
 
         const QSet<QString> uniqueKeywords = QSet<QString>(encontrados.begin(), encontrados.end());
         result.matchedKeywords = uniqueKeywords.values().toVector();
@@ -69,7 +68,7 @@ IntentResult IntentClassifier::classify(const QString &userText) const
     // 4️ TF-IDF fallback
     // ---------------------------
     if (tfidf) {
-        QString best = tfidf->classify(normalizedText);
+        QString best = tfidf->classify(tokens);
         if (!best.isEmpty()) {
             result.intent = best;
             result.confidence = 0.5;

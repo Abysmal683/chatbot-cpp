@@ -24,6 +24,7 @@ public:
 
     // Generador general, integrando contexto y recomendaciones
     QString generateResponse(const QString& userInput,
+                             const QStringList &tokens,
                              bool includeMemory = true,
                              bool includeHistory = true,
                              int historyMessages = 5);

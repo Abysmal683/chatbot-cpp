@@ -1,5 +1,4 @@
 #include "tfindfclassifier.h"
-#include "textprocessor.h"
 #include "rulesdao.h"
 #include "tfidfvectordao.h"
 #include "rule.h"
@@ -7,8 +6,8 @@
 #include <QSet>
 #include <algorithm>
 
-TFIDFClassifier::TFIDFClassifier(TextProcessor *processor, RulesDAO* rules, TFIDFVectorDAO* vector)
-    : processor(processor), rulesDao(rules), vecDao(vector)
+TFIDFClassifier::TFIDFClassifier( RulesDAO* rules, TFIDFVectorDAO* vector)
+    : rulesDao(rules), vecDao(vector)
 {
     rebuildIfNeeded();
 }
@@ -28,7 +27,7 @@ void TFIDFClassifier::clear()
 
 void TFIDFClassifier::rebuild()
 {
-    if (!processor || !rulesDao || !vecDao)
+    if (!rulesDao || !vecDao)
         return;
 
     clear();
@@ -47,9 +46,8 @@ void TFIDFClassifier::rebuild()
             for (const TFIDFVector &v : persisted)
                 tfidf[v.token] = v.tfidf;
         } else {
-            QStringList tokens = processor->tokenize(r.response);
-            auto tf = computeTf(tokens);
-            tfidf = computeTfidf(tf);
+            QStringList tokens = tokenize(r.response);
+            tfidf = computeTfidf(computeTf(tokens));
 
             // Persistir TF-IDF
             for (auto it = tfidf.begin(); it != tfidf.end(); ++it) {
@@ -92,9 +90,8 @@ void TFIDFClassifier::rebuildIfNeeded()
             for (const TFIDFVector &v : persisted)
                 tfidf[v.token] = v.tfidf;
         } else {
-            QStringList tokens = processor->tokenize(r.response);
-            auto tf = computeTf(tokens);
-            tfidf = computeTfidf(tf);
+            QStringList tokens = tokenize(r.response);
+            tfidf = computeTfidf(computeTf(tokens));
 
             // Guardar en DB
             for (auto it = tfidf.begin(); it != tfidf.end(); ++it)
@@ -108,10 +105,10 @@ void TFIDFClassifier::rebuildIfNeeded()
     }
 }
 
-QString TFIDFClassifier::classify(const QString &query) const
+QString TFIDFClassifier::classify(const QStringList &tokens) const
 {
-    if (!processor || documents.isEmpty()) return {};
-    auto qtfidf = computeTfidf(computeTf(processor->tokenize(query)));
+    if (documents.isEmpty()) return {};
+    auto qtfidf = computeTfidf(computeTf(tokens));
 
     QString bestId;
     double bestScore = -1.0;
@@ -126,11 +123,11 @@ QString TFIDFClassifier::classify(const QString &query) const
     return bestId;
 }
 
-QVector<QPair<QString,double>> TFIDFClassifier::topN(const QString &query, int n) const
+QVector<QPair<QString,double>> TFIDFClassifier::topN(const QStringList &tokens, int n) const
 {
     QVector<QPair<QString,double>> ranked;
-    if (!processor || documents.isEmpty()) return ranked;
-    auto qtfidf = computeTfidf(computeTf(processor->tokenize(query)));
+    if (documents.isEmpty()) return ranked;
+    auto qtfidf = computeTfidf(computeTf(tokens));
 
     for (auto it = tfidfVectors.begin(); it != tfidfVectors.end(); ++it)
         ranked.append({it.key(), cosineSim(qtfidf, it.value())});
