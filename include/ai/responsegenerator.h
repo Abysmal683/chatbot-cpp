@@ -3,32 +3,37 @@
 
 #include <QString>
 #include <QStringList>
-#include "intentclassifier.h"
-#include "keyworddetector.h"
-#include "recommendationengine.h"
-#include "contextbuilder.h"
-#include "ruleengine.h"
+
+class ContextBuilder;
+class RuleEngine;
+class RecommendationEngine;
+class IntentClassifier;
+class KeywordDetector;
 
 class ResponseGenerator
 {
 public:
-    // Nuevo constructor: recibe los módulos una sola vez
     ResponseGenerator(ContextBuilder* ctx,
                       RuleEngine* rules,
-                      RecommendationEngine* recs);
+                      RecommendationEngine* recs,
+                      IntentClassifier* intent = nullptr,
+                      KeywordDetector* keyword = nullptr);
 
-    // Cuando hay una regla dura
+    // Respuesta basada en reglas
     QString generateFromRule(const QString& userInput);
 
-    // Generador general
-    QString generateResponse(const QString& userInput);
+    // Generador general, integrando contexto y recomendaciones
+    QString generateResponse(const QString& userInput,
+                             bool includeMemory = true,
+                             bool includeHistory = true,
+                             int historyMessages = 5);
 
 private:
     ContextBuilder* contextBuilder;
     RuleEngine* ruleEngine;
     RecommendationEngine* recommendationEngine;
-    IntentClassifier* intentClassifier;     // se puede inyectar si quieres
-    KeywordDetector* keywordDetector;       // se puede inyectar si quieres
+    IntentClassifier* intentClassifier;
+    KeywordDetector* keywordDetector;
 };
 
-#endif
+#endif // RESPONSEGENERATOR_H

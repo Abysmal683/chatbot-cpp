@@ -20,10 +20,10 @@ class TFIDFClassifier;
 class AIEngine
 {
 public:
-    // Constructor por defecto construye módulos básicos y DAOs usando DatabaseManager
+    // Constructor por defecto: inicializa todos los módulos
     AIEngine();
 
-    // Constructor que recibe punteros inyectados (para tests / DI)
+    // Constructor para inyección de dependencias (tests / DI)
     AIEngine(TextProcessor* tp,
              DialogueMemory* sessionMem,
              ConversationHistoryDAO* historyDao,
@@ -37,10 +37,15 @@ public:
 
     ~AIEngine();
 
-    // Entrada principal: recibe user input y devuelve respuesta textual del bot
-    QString process(const QString& userInput);
+    // Entrada principal para el chat
+    QString process(const QString& userInput,
+                    bool includeMemory = true,
+                    bool includeHistory = true,
+                    int historyMessages = 5);
 
 private:
+    void ensureInitialized();
+
     std::unique_ptr<TextProcessor> textProcessor;
     std::unique_ptr<DialogueMemory> sessionMemory;
     std::unique_ptr<ConversationHistoryDAO> historyDao;
@@ -53,7 +58,6 @@ private:
     std::unique_ptr<LongTermStore> longTermStore;
     std::unique_ptr<TFIDFClassifier> tfidf;
 
-    void ensureInitialized();
     bool initialized = false;
 };
 

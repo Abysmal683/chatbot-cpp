@@ -4,12 +4,14 @@
 #include "longtermstore.h"
 #include "intentclassifier.h"
 #include "keyworddetector.h"
+#include "memorylongterm.h"
+#include <algorithm>
 
 ContextBuilder::ContextBuilder(DialogueMemory* sessionMemory,
-    ConversationHistoryDAO* historyDao,
-    LongTermStore* longTermStore,
-    IntentClassifier* intentClassifier,
-    KeywordDetector* keywordDetector)
+                               ConversationHistoryDAO* historyDao,
+                               LongTermStore* longTermStore,
+                               IntentClassifier* intentClassifier,
+                               KeywordDetector* keywordDetector)
     : sessionMemory(sessionMemory),
     historyDao(historyDao),
     longTermStore(longTermStore),
@@ -19,81 +21,114 @@ ContextBuilder::ContextBuilder(DialogueMemory* sessionMemory,
 }
 
 QString ContextBuilder::buildContext(const QString& userMessage,
-    const QString& intentId,
-    const QStringList& detectedKeywords) const
+                                     const QString& intentId,
+                                     const QStringList& detectedKeywords,
+                                     bool includeMemory,
+                                     bool includeHistory,
+                                     int historyMessages) const
 {
-    QString ctx;
+    QStringList ctxSections;
 
-    ctx += "=== CONTEXT ===\n";
-    ctx += "User message: " + userMessage + "\n";
-    ctx += "Detected intent: " + intentId + "\n";
-    ctx += "Keywords: " + detectedKeywords.join(", ") + "\n\n";
+    // ===== CONTEXT =====
+    ctxSections << "=== CONTEXT ===";
+    ctxSections << "User message: " + userMessage;
 
-    ctx += "=== MEMORY ===\n";
-    ctx += buildMemorySection() + "\n\n";
+    // Si existe el intentClassifier se usa para detectar intención
+    QString intentStr = intentId.isEmpty() && intentClassifier
+                            ? intentClassifier->classify(userMessage).intent
+                            : intentId;
+    ctxSections << "Detected intent: " + intentStr;
 
-    ctx += "=== HISTORY ===\n";
-    ctx += buildHistorySection() + "\n";
+    // Detectar keywords dinámicamente si hay detector
+    QStringList kws = detectedKeywords;
+    if (kws.isEmpty() && keywordDetector)
+        kws = keywordDetector->detectar(userMessage);
+    ctxSections << "Keywords: " + kws.join(", ");
 
-    ctx += "=== END CONTEXT ===\n";
+    // ===== MEMORY =====
+    if (includeMemory) {
+        ctxSections << "\n=== MEMORY ===";
+        ctxSections << buildMemorySection();
+    }
 
-    return ctx;
+    // ===== HISTORY =====
+    if (includeHistory) {
+        ctxSections << "\n=== HISTORY ===";
+        ctxSections << buildHistorySection(historyMessages);
+    }
+
+    ctxSections << "=== END CONTEXT ===";
+
+    return ctxSections.join("\n");
 }
 
 // --------------------------------------------
-// Memoria del usuario: gustos, preferencias, datos persistentes
+// Memoria de largo plazo, ordenada y eficiente
 // --------------------------------------------
 QString ContextBuilder::buildMemorySection() const
 {
     if (!longTermStore)
-        return "No long-term memory available.\n";
+        return "No long-term memory available.";
 
-    const QList<QString> keys = longTermStore->listKeys();
+    const auto keys = longTermStore->listKeys();
     if (keys.isEmpty())
-        return "No saved long-term memory.\n";
+        return "No saved long-term memory.";
 
-    QString out;
-
+    QStringList output;
     for (const QString& key : keys) {
-
-        const QList<MemoryLongTerm> list = longTermStore->getAllMemories(key);
-
-        if (list.isEmpty())
+        const auto memories = longTermStore->getAllMemories(key);
+        if (memories.isEmpty())
             continue;
 
-        out += key + ": ";
+        // Ordenar por importancia descendente
+        QList<MemoryLongTerm> sorted = memories;
+        std::sort(sorted.begin(), sorted.end(),
+                  [](const MemoryLongTerm& a, const MemoryLongTerm& b) {
+                      return a.importance > b.importance;
+                  });
 
         QStringList values;
-        for (const MemoryLongTerm& m : list)
-            values.append(m.value);
+        for (const MemoryLongTerm& m : sorted)
+            values << m.value;
 
-        out += values.join(" | ");
-        out += "\n";
+        output << key + ": " + values.join(" | ");
     }
 
-    if (out.isEmpty())
-        return "Memory empty.\n";
-
-    return out;
+    return output.isEmpty() ? "Memory empty." : output.join("\n");
 }
 
 // --------------------------------------------
 // Historial reciente de conversación
 // --------------------------------------------
-QString ContextBuilder::buildHistorySection() const
+QString ContextBuilder::buildHistorySection(int nMessages) const
 {
-    if (!historyDao)
-        return "No conversation history.\n";
+    // No hay memoria ni historial
+    if (!sessionMemory && !historyDao)
+        return "No session or history memory available.";
 
-    const auto last = historyDao->getLastMessages(5);
-    if (last.isEmpty())
-        return "No previous messages.\n";
+    QStringList out;
+    int remaining = nMessages;
 
-    QString out;
-    for (const auto& h : last) {
-        out += "U: " + h.user_message + "\n";
-        out += "B: " + h.bot_message + "\n";
+    // 1️ Tomar primero de sessionMemory si existe
+    if (sessionMemory) {
+        const auto lastSession = sessionMemory->getLast(remaining);
+        for (const auto& msg : lastSession) {
+            if (msg.sender == Constants::User)
+                out << QString("U [%1]: %2").arg(msg.timestamp, msg.text);
+            else if (msg.sender == Constants::Bot)
+                out << QString("B [%1]: %2").arg(msg.timestamp, msg.text);
+        }
+        remaining -= lastSession.size();
     }
 
-    return out;
+    // 2️ Completar con historyDao si aún faltan
+    if (remaining > 0 && historyDao) {
+        const auto lastHistory = historyDao->getLastMessages(remaining);
+        for (const auto& h : lastHistory) {
+            out << QString("U [%1]: %2").arg(h.timestamp, h.user_message);
+            out << QString("B [%1]: %2").arg(h.timestamp, h.bot_message);
+        }
+    }
+
+    return out.isEmpty() ? "No previous messages." : out.join("\n");
 }
