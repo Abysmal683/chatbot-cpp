@@ -14,6 +14,7 @@ DataBaseManager::DataBaseManager() {
     if (!dir.exists()) dir.mkpath(dir.path());
     db.setDatabaseName(dbPath);
     qDebug() << "Se inicio ";
+    qDebug() << dbPath;
 }
 
 DataBaseManager::~DataBaseManager() {
