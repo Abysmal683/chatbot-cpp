@@ -53,6 +53,7 @@ QString ResponseGenerator::generateResponse(const QString& userInput,
     qDebug() << "[ResponseGenerator]intenciones obtenidas de intent classifier" ;
     QStringList kws = keywordDetector ? keywordDetector->detectar(userInput,tokens): QStringList();
         qDebug() << "[ResponseGenerator]respuesta obtenida de keyword dectector" ;
+
     qDebug() << "[ResponseGenerator] construyendo contexto con contextbuilder->buildcontext" ;
     // Construir contexto completo usando el nuevo ContextBuilder
     QString context = contextBuilder->buildContext(userInput,
