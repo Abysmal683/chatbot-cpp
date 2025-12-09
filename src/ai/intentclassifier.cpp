@@ -1,14 +1,12 @@
 #include "intentclassifier.h"
-#include "textprocessor.h"
 #include "keyworddetector.h"
 #include "tfindfclassifier.h"
 #include "ruleengine.h"
 
-IntentClassifier::IntentClassifier(TextProcessor *tp,
-   KeywordDetector *kd,
-   TFIDFClassifier *tfidf,
-   RuleEngine *rules)
-    : tp(tp), kd(kd), tfidf(tfidf), rules(rules)
+IntentClassifier::IntentClassifier(KeywordDetector *kd,
+                                   TFIDFClassifier *tfidf,
+                                   RuleEngine *rules)
+    : kd(kd), tfidf(tfidf), rules(rules)
 {
 }
 
@@ -17,15 +15,16 @@ void IntentClassifier::setKeywordCategories(const QHash<QString, QString> &categ
     keywordCategories = categories;
 }
 
-IntentResult IntentClassifier::classify(const QString &userText)const
+IntentResult IntentClassifier::classify(const QString &userText) const
 {
     IntentResult result;
     result.intent = "UNKNOWN";
     result.confidence = 0.0;
 
-    // 1. reglas duras
+    if (userText.isEmpty()) return result;
+    // 1️ Reglas duras
     if (rules) {
-        QString r = classifyByRules(userText);
+        QString r = rules->match(userText); // ya normalizado
         if (!r.isEmpty()) {
             result.intent = r;
             result.confidence = 1.0;
@@ -33,21 +32,23 @@ IntentResult IntentClassifier::classify(const QString &userText)const
         }
     }
 
-    // 2. keywords
-    QVector<QString> encontrados = kd->detectar(userText);
+    // 2️ Keywords
+    QVector<QString> encontrados;
+    if (kd) encontrados = kd->detectar(userText); // pasar texto normalizado
 
     result.matchedKeywords = encontrados;
 
-    QString fromKW = classifyByKeywords(encontrados);
-    if (!fromKW.isEmpty()) {
-        result.intent = fromKW;
-        result.confidence = 0.7;
-        return result;
+    for (const QString &k : std::as_const(encontrados)) {
+        if (keywordCategories.contains(k)) {
+            result.intent = keywordCategories.value(k);
+            result.confidence = 0.7;
+            return result;
+        }
     }
 
-    // 3. TF-IDF fallback
+    // 3️ TF-IDF fallback
     if (tfidf) {
-        QString best = tfidf->classify(userText);
+        QString best = tfidf->classify(userText); // tokenize interno
         if (!best.isEmpty()) {
             result.intent = best;
             result.confidence = 0.5;
@@ -56,26 +57,4 @@ IntentResult IntentClassifier::classify(const QString &userText)const
     }
 
     return result;
-}
-
-QString IntentClassifier::classifyByRules(const QString &text) const
-{
-    if (!rules)
-        return QString();
-
-    return rules->match(text);   // match() será implementado en RuleEngine
-}
-
-QString IntentClassifier::classifyByKeywords(const QVector<QString> &found) const
-{
-    if (found.isEmpty())
-        return QString();
-
-    for (const QString &k : found) {
-        QString normalized = tp->normalizeText(k);
-        if (keywordCategories.contains(normalized))
-            return keywordCategories.value(normalized);
-    }
-
-    return QString();
 }

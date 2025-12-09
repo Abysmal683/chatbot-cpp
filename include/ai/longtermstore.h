@@ -4,6 +4,7 @@
 #include <QString>
 #include <QHash>
 #include "memorylongterm.h"
+//se encarga de registrar la memoria persistente y preferencias
 class UserPreferenceDAO;
 class MemoryLongTermDAO;
 
@@ -17,13 +18,14 @@ public:
     QString getPreference(const QString& key) const;
 
     // Memoria general de largo plazo
-    void saveMemory(const QString& key, const QString& value, int importance);
+    void saveMemory(const QString& key, const QString& value, int importance = 5);
     QString getMemory(const QString& key) const;
     QList<MemoryLongTerm> getAllMemories(const QString& key) const;
     QList<QString> listKeys() const;
+
 private:
     UserPreferenceDAO* prefDao;
     MemoryLongTermDAO* memDao;
 };
 
-#endif
+#endif // LONGTERMSTORE_H

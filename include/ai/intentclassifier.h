@@ -4,8 +4,7 @@
 #include <QString>
 #include <QVector>
 #include <QHash>
-
-class TextProcessor;
+//elige entre 3 metodos de rastreo para la mejor repuesta por pesos
 class KeywordDetector;
 class TFIDFClassifier;
 class RuleEngine;
@@ -18,8 +17,7 @@ struct IntentResult {
 
 class IntentClassifier {
 public:
-    IntentClassifier(TextProcessor *tp,
-                     KeywordDetector *kd,
+    IntentClassifier(KeywordDetector *kd,
                      TFIDFClassifier *tfidf,
                      RuleEngine *rules);
 
@@ -28,16 +26,12 @@ public:
     void setKeywordCategories(const QHash<QString, QString> &categories);
 
 private:
-    TextProcessor *tp;
     KeywordDetector *kd;
     TFIDFClassifier *tfidf;
     RuleEngine *rules;
 
     // mapa: keyword_normalizada → categoría
     QHash<QString, QString> keywordCategories;
-
-    QString classifyByKeywords(const QVector<QString> &found) const;
-    QString classifyByRules(const QString &text) const;
 };
 
 #endif // INTENTCLASSIFIER_H

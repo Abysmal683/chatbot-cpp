@@ -16,7 +16,6 @@ public:
     QList<QString> listKeys() const;
 
 private:
-
     // Implementación obligatoria
     MemoryLongTerm fromQuery(const QSqlQuery& q) const override;
     void bindInsert(QSqlQuery& q, const MemoryLongTerm& m) const override;
@@ -24,7 +23,6 @@ private:
 
     // alias inline
     static inline const QString& T        = Constants::Tables::MemoryLongTerm;
-
     static inline const QString& C_Id     = Constants::Columns::MemoryLongTerm::Id;
     static inline const QString& C_Key    = Constants::Columns::MemoryLongTerm::Key;
     static inline const QString& C_Val    = Constants::Columns::MemoryLongTerm::Value;

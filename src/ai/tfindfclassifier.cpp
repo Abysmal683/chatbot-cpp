@@ -110,10 +110,7 @@ void TFIDFClassifier::rebuildIfNeeded()
 QString TFIDFClassifier::classify(const QString &query) const
 {
     if (!processor || documents.isEmpty()) return {};
-
-    auto qTokens = processor->tokenize(query);
-    auto qtf = computeTf(qTokens);
-    auto qtfidf = computeTfidf(qtf);
+    auto qtfidf = computeTfidf(computeTf(processor->tokenize(query)));
 
     QString bestId;
     double bestScore = -1.0;
@@ -132,10 +129,7 @@ QVector<QPair<QString,double>> TFIDFClassifier::topN(const QString &query, int n
 {
     QVector<QPair<QString,double>> ranked;
     if (!processor || documents.isEmpty()) return ranked;
-
-    auto qTokens = processor->tokenize(query);
-    auto qtf = computeTf(qTokens);
-    auto qtfidf = computeTfidf(qtf);
+    auto qtfidf = computeTfidf(computeTf(processor->tokenize(query)));
 
     for (auto it = tfidfVectors.begin(); it != tfidfVectors.end(); ++it)
         ranked.append({it.key(), cosineSim(qtfidf, it.value())});
