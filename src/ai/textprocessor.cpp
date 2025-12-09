@@ -15,9 +15,8 @@ TextProcessor::TextProcessor()
 }
 QStringList TextProcessor::process(const QString& text)
 {
-    QString t = normalizeText(text);
-    auto tokens = tokenize(t);
-    tokens = removeStopWords(tokens);
+    QStringList tokens;
+    tokens = removeStopWords(tokenize(text));
     return stemWords(tokens);
 }
 // ---------------------------------
@@ -25,9 +24,11 @@ QStringList TextProcessor::process(const QString& text)
 // ---------------------------------
 QString TextProcessor::normalizeText(const QString &text) const
 {
+    //qDebug() << "[TextProcessor] normalize text";
     QString t = text;
     t = t.toLower();
     t = removeSpecialChars(t);
+    //qDebug() << "[TextProcessor] retornando simplificado";
     return t.simplified();
 }
 
@@ -36,6 +37,7 @@ QString TextProcessor::normalizeText(const QString &text) const
 // ---------------------------------
 QStringList TextProcessor::tokenize(const QString &text) const
 {
+    //qDebug() << "[TextProcessor] tokenizando";
     return normalizeText(text).split(QRegularExpression("\\s+"), Qt::SkipEmptyParts);
 }
 
@@ -44,6 +46,7 @@ QStringList TextProcessor::tokenize(const QString &text) const
 // ---------------------------------
 QStringList TextProcessor::removeStopWords(const QStringList &tokens) const
 {
+    //qDebug() << "[TextProcessor] remove stopswords";
     QStringList filtered;
     filtered.reserve(tokens.size());
 
@@ -61,6 +64,7 @@ QStringList TextProcessor::removeStopWords(const QStringList &tokens) const
 // ---------------------------------
 QString TextProcessor::stemWord(const QString &word) const
 {
+    //qDebug() << "[TextProcessor] steam word";
     QString w = word;
 
     const QStringList suffixes = {
@@ -86,6 +90,7 @@ QString TextProcessor::stemWord(const QString &word) const
 // ---------------------------------
 QStringList TextProcessor::stemWords(const QStringList &tokens) const
 {
+    //qDebug() << "[TextProcessor] stem words";
     QStringList result;
     result.reserve(tokens.size());
 
@@ -100,6 +105,7 @@ QStringList TextProcessor::stemWords(const QStringList &tokens) const
 // ---------------------------------
 QString TextProcessor::removeSpecialChars(const QString &text) const
 {
+    //qDebug() << "[TextProcessor] remover special caracteres";
     QString cleaned = text;
     cleaned.replace(QRegularExpression("[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\\s]"), " ");
     return cleaned.trimmed();

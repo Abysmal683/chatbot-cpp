@@ -1,14 +1,12 @@
 #include "ruleengine.h"
-#include "textprocessor.h"
 #include "keyworddetector.h"
 #include "rulesdao.h"
 #include <algorithm>
 #include <QDebug>
 
-RuleEngine::RuleEngine(TextProcessor *processor,
-                       KeywordDetector *detector,
+RuleEngine::RuleEngine(KeywordDetector *detector,
                        RulesDAO *dao)
-    : processor(processor), detector(detector), rulesDao(dao)
+    : detector(detector), rulesDao(dao)
 {
 }
 
@@ -45,14 +43,13 @@ void RuleEngine::addRule(const Rule &rule)
  */
 QString RuleEngine::match(const QString &texto) const
 {
-    if (!processor || !detector || texto.isEmpty())
+    if (!detector || texto.isEmpty())
         return "";
 
-    QString normalizedText = processor->normalizeText(texto);
 
     for (const Rule &r : rules) {
         // Solo verificar coincidencia directa
-        if (normalizedText.contains(r.trigger))
+        if (texto.contains(r.trigger))
             return r.trigger; // Si quieres, podrías devolver r.response
     }
 

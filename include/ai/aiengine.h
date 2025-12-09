@@ -1,7 +1,6 @@
 #ifndef AIENGINE_H
 #define AIENGINE_H
 
-#include <memory>
 #include <QString>
 
 // Forward declarations
@@ -16,9 +15,21 @@ class ContextBuilder;
 class ResponseGenerator;
 class LongTermStore;
 class TFIDFClassifier;
-
-class AIEngine
-{
+// En AIEngine.h
+class GameTagsDAO ;
+class GameGenresDAO ;
+class GamePlatformsDAO ;
+class GameDAO ;
+class TagDAO ;
+class GenreDAO ;
+class PlatformDAO ;
+class RulesDAO ;
+class TFIDFVectorDAO ;
+class KeywordDAO;
+class UserPreferenceDAO ;
+class MemoryLongTermDAO ;
+class ConversationHistoryDAO ;
+class AIEngine {
 public:
     // Constructor por defecto: inicializa todos los módulos
     AIEngine();
@@ -48,7 +59,6 @@ private:
 
     std::unique_ptr<TextProcessor> textProcessor;
     std::unique_ptr<DialogueMemory> sessionMemory;
-    std::unique_ptr<ConversationHistoryDAO> historyDao;
     std::unique_ptr<IntentClassifier> intentClassifier;
     std::unique_ptr<KeywordDetector> keywordDetector;
     std::unique_ptr<RuleEngine> ruleEngine;
@@ -57,7 +67,20 @@ private:
     std::unique_ptr<ResponseGenerator> responseGenerator;
     std::unique_ptr<LongTermStore> longTermStore;
     std::unique_ptr<TFIDFClassifier> tfidf;
-
+    // En AIEngine.h
+    std::unique_ptr<GameTagsDAO> gameTagsDao;
+    std::unique_ptr<GameGenresDAO> gameGenresDao;
+    std::unique_ptr<GamePlatformsDAO> gamePlatformsDao;
+    std::unique_ptr<GameDAO> gameDao;
+    std::unique_ptr<TagDAO> tagDao;
+    std::unique_ptr<GenreDAO> genreDao;
+    std::unique_ptr<PlatformDAO> platformDao;
+    std::unique_ptr<RulesDAO> rulesDao;
+    std::unique_ptr<TFIDFVectorDAO> tfindDao;
+    std::unique_ptr<KeywordDAO> keyDao;
+    std::unique_ptr<UserPreferenceDAO> prefDao;
+    std::unique_ptr<MemoryLongTermDAO> memLongDao;
+    std::unique_ptr<ConversationHistoryDAO> historyDao;
     bool initialized = false;
 };
 

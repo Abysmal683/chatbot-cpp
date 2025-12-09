@@ -20,10 +20,10 @@ private:
     void bindUpdate(QSqlQuery& q, const TFIDFVector& v) const override;
 
     /* ALIAS USADOS POR EL ESTÁNDAR */
-    const QString T      = Constants::Tables::TFIDFVectors;
-    const QString C_RuleId = Constants::Columns::TFIDFVectors::RuleId;
-    const QString C_Token  = Constants::Columns::TFIDFVectors::Token;
-    const QString C_TFIDF  = Constants::Columns::TFIDFVectors::TFIDF;
+    static inline const QString T      = Constants::Tables::TFIDFVectors;
+    static inline const QString C_RuleId = Constants::Columns::TFIDFVectors::RuleId;
+    static inline const QString C_Token  = Constants::Columns::TFIDFVectors::Token;
+    static inline const QString C_TFIDF  = Constants::Columns::TFIDFVectors::TFIDF;
 };
 
 #endif // TFIDFVECTORDAO_H

@@ -5,7 +5,8 @@
 
 RulesDAO::RulesDAO(QSqlDatabase& db)
     : BaseEntityDAO<Rule>(T, db)
-{}
+{
+}
 
 /* ----------------------------------------------------------
  * MAPEAR QUERY → Rule

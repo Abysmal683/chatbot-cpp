@@ -5,15 +5,13 @@
 #include <QVector>
 #include "rule.h"  // Struct Rule ya definido
 
-class TextProcessor;
 class KeywordDetector;
 class RulesDAO;
 //busca encontrar triggers o palabras claves de rules para asi reaccionar
 class RuleEngine
 {
 public:
-    explicit RuleEngine(TextProcessor *processor,
-                        KeywordDetector *detector,
+    explicit RuleEngine(KeywordDetector *detector,
                         RulesDAO *dao);
 
     // Cargar reglas activas desde DB
@@ -26,7 +24,6 @@ public:
     QString match(const QString &texto) const;
 
 private:
-    TextProcessor *processor;
     KeywordDetector *detector;
     RulesDAO *rulesDao;
 

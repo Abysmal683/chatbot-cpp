@@ -8,7 +8,7 @@
 class KeywordDetector;
 class TFIDFClassifier;
 class RuleEngine;
-
+class TextProcessor;
 struct IntentResult {
     QString intent;
     double confidence;
@@ -19,7 +19,7 @@ class IntentClassifier {
 public:
     IntentClassifier(KeywordDetector *kd,
                      TFIDFClassifier *tfidf,
-                     RuleEngine *rules);
+                     RuleEngine *rules,TextProcessor *tp);
 
     IntentResult classify(const QString &userText) const;
 
@@ -29,7 +29,7 @@ private:
     KeywordDetector *kd;
     TFIDFClassifier *tfidf;
     RuleEngine *rules;
-
+    TextProcessor *tp;
     // mapa: keyword_normalizada → categoría
     QHash<QString, QString> keywordCategories;
 };

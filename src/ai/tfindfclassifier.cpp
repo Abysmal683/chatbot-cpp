@@ -10,6 +10,7 @@
 TFIDFClassifier::TFIDFClassifier(TextProcessor *processor, RulesDAO* rules, TFIDFVectorDAO* vector)
     : processor(processor), rulesDao(rules), vecDao(vector)
 {
+    rebuildIfNeeded();
 }
 
 void TFIDFClassifier::addDocument(const QString &id, const QString &texto)

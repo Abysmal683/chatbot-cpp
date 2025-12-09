@@ -6,19 +6,15 @@
 #include <QVector>
 #include <QSet>
 //utiliza textproceesor para tokenizar la palabra pasada y encontrar parentescos en la db pasada
-class TextProcessor; // forward declaration
-
 class KeywordDetector {
 public:
-    explicit KeywordDetector(TextProcessor *processor);
+    explicit KeywordDetector();
 
     void setKeywords(const QStringList &keywords);
-    QVector<QString> detectar(const QString &texto) const;
+    QVector<QString> detectar(const QString &texto,const QStringList &tokens) const;
 
 private:
     void rebuildCache();
-
-    TextProcessor *processor;        // no ownership
     QStringList keywords;            // originales
     QStringList normalizedKeywords;  // normalizadas
 };

@@ -1,4 +1,5 @@
 #include "chatwidget.h"
+#include "aiengine.h"
 #include "ui_chatwidget.h"
 
 ChatWidget::ChatWidget(QWidget *parent) :

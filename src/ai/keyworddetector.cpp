@@ -1,8 +1,6 @@
 #include "keyworddetector.h"
-#include "textprocessor.h"
 #include <QRegularExpression>
-KeywordDetector::KeywordDetector(TextProcessor *processor)
-    : processor(processor)
+KeywordDetector::KeywordDetector()
 {
 }
 
@@ -14,30 +12,29 @@ void KeywordDetector::setKeywords(const QStringList &keywords)
 
 void KeywordDetector::rebuildCache()
 {
+     qDebug() << "[KeywordDetector] dentro de rebuildCache";
     normalizedKeywords.clear();
-
-    TextProcessor *p = processor;
-    if (!p) return;
-
     normalizedKeywords.reserve(keywords.size());
-
     for (const QString &kw : std::as_const(keywords))
-        normalizedKeywords.append(p->normalizeText(kw));
+        normalizedKeywords.append(kw);
+     qDebug() << "[KeywordDetector] saliendo de rebuild cache";
 }
 
-QVector<QString> KeywordDetector::detectar(const QString &texto) const
+QVector<QString> KeywordDetector::detectar(const QString &texto,const QStringList &tokens) const
 {
+    qDebug() << "[KeywordDetector] dentro de dectectar";
     QVector<QString> encontrados;
 
-    if (!processor || texto.isEmpty())
+    if (texto.isEmpty())
         return encontrados;
-    // Tokenizar en espacios
-    QSet<QString> tokens(
-        processor->tokenize(texto).cbegin(),
-        processor->tokenize(texto).cend()
-        );
+
+    QSet<QString> c_tokens(tokens.begin(), tokens.end());
+
+    // Usar un QSet para filtrar duplicados
+    QSet<QString> encontradosSet;
 
     // Comparación keywords-normalizadas
+    qDebug() << "[KeywordDetector] entrando en for";
     for (int i = 0; i < normalizedKeywords.size(); ++i)
     {
         const QString &kwNorm = normalizedKeywords.at(i);
@@ -45,14 +42,24 @@ QVector<QString> KeywordDetector::detectar(const QString &texto) const
 
         // Coincidencia exacta por token
         if (tokens.contains(kwNorm)) {
-            encontrados.append(kwOrig);
+            if (!encontradosSet.contains(kwOrig)) {
+                encontrados.append(kwOrig);
+                encontradosSet.insert(kwOrig);
+                qDebug() << "[KeywordDetector] token exacto encontrado:" << kwOrig;
+            }
             continue;
         }
 
         // Coincidencia parcial
-        if (processor->normalizeText(texto).contains(kwNorm))
-            encontrados.append(kwOrig);
+        if (texto.contains(kwNorm)) {
+            if (!encontradosSet.contains(kwOrig)) {
+                encontrados.append(kwOrig);
+                encontradosSet.insert(kwOrig);
+                qDebug() << "[KeywordDetector] token parcial encontrado:" << kwOrig;
+            }
+        }
     }
 
+    qDebug() << "[KeywordDetector] saliendo de dectectar";
     return encontrados;
 }

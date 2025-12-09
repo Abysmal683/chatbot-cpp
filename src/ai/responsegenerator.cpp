@@ -4,6 +4,7 @@
 #include "recommendationengine.h"
 #include "intentclassifier.h"
 #include "keyworddetector.h"
+#include <qdebug.h>
 
 ResponseGenerator::ResponseGenerator(ContextBuilder* ctx,
                                      RuleEngine* rules,
@@ -41,15 +42,21 @@ QString ResponseGenerator::generateResponse(const QString& userInput,
                                             bool includeHistory,
                                             int historyMessages)
 {
+    qDebug() << "[ResponseGenerator] adentro de generate response" ;
     if (!contextBuilder)
         return "Disculpa, no logré entender tu petición.";
 
     // Determinar intención y keywords
+    qDebug() << "[ResponseGenerator] determinando intencion y keyword" ;
     QString intentStr = intentClassifier ? intentClassifier->classify(userInput).intent : "none";
+    qDebug() << "[ResponseGenerator]intenciones obtenidas de intent classifier" ;
     QStringList kws;
-    if (keywordDetector)
+    if (keywordDetector){
+        qDebug() << "[ResponseGenerator]solicitando a keywordDectector->dectectar" ;
         kws = keywordDetector->detectar(userInput);
-
+        qDebug() << "[ResponseGenerator]respuesta obtenida de keyword dectector" ;
+    }
+    qDebug() << "[ResponseGenerator] construyendo contexto con contextbuilder->buildcontext" ;
     // Construir contexto completo usando el nuevo ContextBuilder
     QString context = contextBuilder->buildContext(userInput,
                                                    intentStr,
@@ -60,10 +67,14 @@ QString ResponseGenerator::generateResponse(const QString& userInput,
 
     // Recomendaciones si existe engine
     QStringList recs;
-    if (recommendationEngine)
+    if (recommendationEngine){
+        qDebug() << "[ResponseGenerator]solicitando recomendacion de recommendatonEngine->recommend" ;
         recs = recommendationEngine->recommend(userInput);
+        qDebug() << "[ResponseGenerator]respuesta obtenida de recommendation engine" ;
+    }
 
     // Formatear la respuesta final
+    qDebug() << "[ResponseGenerator]creando respuesta final" ;
     QStringList output;
     output << "=== RESPONSE ===";
     output << context;

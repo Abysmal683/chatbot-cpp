@@ -2,8 +2,7 @@
 #define CHATWIDGET_H
 
 #include <QWidget>
-#include "ai/aiengine.h"  // Asegúrate de tener el AIEngine
-
+class AIEngine;
 namespace Ui {
 class ChatWidget;
 }
