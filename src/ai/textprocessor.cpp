@@ -36,7 +36,7 @@ QString TextProcessor::normalizeText(const QString &text) const
 // ---------------------------------
 QStringList TextProcessor::tokenize(const QString &text) const
 {
-    return text.split(QRegularExpression("\\s+"), Qt::SkipEmptyParts);
+    return normalizeText(text).split(QRegularExpression("\\s+"), Qt::SkipEmptyParts);
 }
 
 // ---------------------------------

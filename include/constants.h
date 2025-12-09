@@ -23,6 +23,8 @@ inline const QString MemoryShortTerm  = "memory_short_term";
 
 inline const QString ConversationHist = "conversation_history";
 inline const QString Rules            = "rules";
+inline const QString TFIDFVectors    = "tfidf_vectors";
+
 inline const QString Keywords         = "keywords";
 inline const QString UserPreferences  = "user_preferences";
 inline const QString Logs             = "logs";
@@ -92,15 +94,15 @@ inline const QString Time    = "timestamp";  // <-- actualizado
 
 /* -------- RULES -------- */
 namespace Rules {
-inline constexpr auto Id         = "id";
-inline constexpr auto Trigger    = "trigger";
-inline constexpr auto Response   = "response";
-inline constexpr auto Priority   = "priority";
-inline constexpr auto Category   = "category";
-inline constexpr auto Source     = "source";
-inline constexpr auto IsActive   = "is_active";
-inline constexpr auto CreatedAt  = "created_at";
-inline constexpr auto UpdatedAt  = "updated_at";
+inline const QString Id         = "id";
+inline const QString Trigger    = "trigger";
+inline const QString Response   = "response";
+inline const QString Priority   = "priority";
+inline const QString Category   = "category";
+inline const QString Source     = "source";
+inline const QString IsActive   = "is_active";
+inline const QString CreatedAt  = "created_at";
+inline const QString UpdatedAt  = "updated_at";
 }
 
 /* -------- KEYWORDS -------- */
@@ -109,7 +111,11 @@ inline const QString Id       = "id";
 inline const QString Keyword  = "keyword";
 inline const QString Category = "category";
 }
-
+namespace TFIDFVectors {
+inline const QString RuleId   = "rule_id";
+inline const QString Token    = "token";
+inline const QString TFIDF    = "tfidf";
+}
 /* -------- USER PREFERENCES -------- */
 namespace UserPreferences {
 inline const QString Id       = "id";

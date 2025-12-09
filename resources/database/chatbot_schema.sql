@@ -101,7 +101,13 @@ CREATE TABLE IF NOT EXISTS rules(
 );
 
 CREATE INDEX IF NOT EXISTS idx_rules_trigger ON rules(trigger);
-
+CREATE TABLE IF NOT EXISTS tfidf_vectors (
+    rule_id INTEGER NOT NULL,
+    token TEXT NOT NULL,
+    tfidf REAL NOT NULL,
+    PRIMARY KEY (rule_id, token),
+    FOREIGN KEY(rule_id) REFERENCES rules(id) ON DELETE CASCADE
+);
 CREATE TABLE IF NOT EXISTS keywords(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     keyword TEXT NOT NULL,

@@ -31,15 +31,10 @@ QVector<QString> KeywordDetector::detectar(const QString &texto) const
 
     if (!processor || texto.isEmpty())
         return encontrados;
-
-    QString normalizado = processor->normalizeText(texto);
-
     // Tokenizar en espacios
     QSet<QString> tokens(
-        normalizado.split(QRegularExpression("\\s+"), Qt::SkipEmptyParts)
-            .begin(),
-        normalizado.split(QRegularExpression("\\s+"), Qt::SkipEmptyParts)
-            .end()
+        processor->tokenize(texto).cbegin(),
+        processor->tokenize(texto).cend()
         );
 
     // Comparación keywords-normalizadas
@@ -55,7 +50,7 @@ QVector<QString> KeywordDetector::detectar(const QString &texto) const
         }
 
         // Coincidencia parcial
-        if (normalizado.contains(kwNorm))
+        if (processor->normalizeText(texto).contains(kwNorm))
             encontrados.append(kwOrig);
     }
 

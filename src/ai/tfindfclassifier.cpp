@@ -31,41 +31,73 @@ void TFIDFClassifier::rebuild()
         return;
 
     // Limpiar datos previos
-    tfidfVectors.clear();
-    df.clear();
-    documents.clear();
+    clear();
 
     // Cargar documentos desde reglas activas
     QList<Rule> activeRules = rulesDao->getActiveRules();
-    for (const Rule& r : activeRules) {
-        documents[r.trigger] = r.response; // trigger como documento
-    }
+    documents.reserve(activeRules.size());
+    for (const Rule& r : std::as_const(activeRules))
+        documents[r.trigger] = r.response;
 
     totalDocs = documents.size();
+    if (totalDocs == 0) return;
 
-    // 1. Calcular DF (document frequency)
+    // Construir DF y TF-IDF en un solo bucle
     for (auto it = documents.begin(); it != documents.end(); ++it) {
-        QStringList tokens = tokenize(it.value());
+        QStringList tokens = processor->tokenize(it.value());
+
+        // DF
         QSet<QString> unique(tokens.begin(), tokens.end());
         for (const QString &w : unique)
             df[w] += 1;
-    }
 
-    // 2. Calcular TF-IDF por documento
-    for (auto it = documents.begin(); it != documents.end(); ++it) {
-        QStringList tokens = tokenize(it.value());
+        // TF + TF-IDF
         auto tf = computeTf(tokens);
-        auto tfidf = computeTfidf(tf);
-        tfidfVectors[it.key()] = tfidf;
+        tfidfVectors[it.key()] = computeTfidf(tf);
     }
 }
 
+void TFIDFClassifier::rebuildIfNeeded()
+{
+    if (!rulesDao)
+        return;
+
+    QList<Rule> activeRules = rulesDao->getActiveRules();
+    int currentVersion = activeRules.size();
+
+    if (currentVersion == rulesVersion)
+        return; // No hay cambios
+
+    rulesVersion = currentVersion;
+
+    // Reconstruir TF-IDF mínimo necesario
+    tfidfVectors.clear();
+    df.clear();
+    documents.clear();
+    totalDocs = activeRules.size();
+    if (totalDocs == 0) return;
+
+    documents.reserve(activeRules.size());
+    for (const Rule& r : std::as_const(activeRules))
+        documents[r.trigger] = r.response;
+
+    // DF y TF-IDF en un solo bucle
+    for (auto it = documents.begin(); it != documents.end(); ++it) {
+        QStringList tokens = processor->tokenize(it.value());
+        QSet<QString> unique(tokens.begin(), tokens.end());
+        for (const QString &w : unique)
+            df[w] += 1;
+
+        auto tf = computeTf(tokens);
+        tfidfVectors[it.key()] = computeTfidf(tf);
+    }
+}
 QString TFIDFClassifier::classify(const QString &query) const
 {
     if (!processor || documents.isEmpty())
         return QString();
 
-    auto qTokens = tokenize(query);
+    auto qTokens = processor->tokenize(query);
     auto qtf = computeTf(qTokens);
     auto qtfidf = computeTfidf(qtf);
 
@@ -90,7 +122,7 @@ QVector<QPair<QString, double>> TFIDFClassifier::topN(const QString &query, int 
     if (!processor || documents.isEmpty())
         return ranked;
 
-    auto qTokens = tokenize(query);
+    auto qTokens = processor->tokenize(query);
     auto qtf = computeTf(qTokens);
     auto qtfidf = computeTfidf(qtf);
 
@@ -106,12 +138,6 @@ QVector<QPair<QString, double>> TFIDFClassifier::topN(const QString &query, int 
         ranked.resize(n);
 
     return ranked;
-}
-
-QStringList TFIDFClassifier::tokenize(const QString &text) const
-{
-    QString t = processor->normalizeText(text);
-    return t.split(QRegularExpression("\\s+"), Qt::SkipEmptyParts);
 }
 
 QHash<QString, double> TFIDFClassifier::computeTf(const QStringList &tokens) const
