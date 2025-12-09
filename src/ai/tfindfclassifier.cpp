@@ -1,14 +1,14 @@
 #include "tfindfclassifier.h"
 #include "textprocessor.h"
 #include "rulesdao.h"
+#include "tfidfvectordao.h"
 #include "rule.h"
 #include <QtMath>
 #include <QSet>
 #include <algorithm>
-#include <qregularexpression.h>
 
-TFIDFClassifier::TFIDFClassifier(TextProcessor *processor, RulesDAO* dao)
-    : processor(processor), rulesDao(dao)
+TFIDFClassifier::TFIDFClassifier(TextProcessor *processor, RulesDAO* rules, TFIDFVectorDAO* vector)
+    : processor(processor), rulesDao(rules), vecDao(vector)
 {
 }
 
@@ -27,33 +27,41 @@ void TFIDFClassifier::clear()
 
 void TFIDFClassifier::rebuild()
 {
-    if (!processor || !rulesDao)
+    if (!processor || !rulesDao || !vecDao)
         return;
 
-    // Limpiar datos previos
     clear();
-
-    // Cargar documentos desde reglas activas
-    QList<Rule> activeRules = rulesDao->getActiveRules();
-    documents.reserve(activeRules.size());
-    for (const Rule& r : std::as_const(activeRules))
-        documents[r.trigger] = r.response;
-
-    totalDocs = documents.size();
+    const QList<Rule> activeRules = rulesDao->getActiveRules();
+    totalDocs = activeRules.size();
     if (totalDocs == 0) return;
 
-    // Construir DF y TF-IDF en un solo bucle
-    for (auto it = documents.begin(); it != documents.end(); ++it) {
-        QStringList tokens = processor->tokenize(it.value());
+    for (const Rule &r : activeRules) {
+        documents[r.trigger] = r.response;
 
-        // DF
-        QSet<QString> unique(tokens.begin(), tokens.end());
-        for (const QString &w : unique)
-            df[w] += 1;
+        // Recuperar vectores persistidos
+        const QList<TFIDFVector> persisted = vecDao->getByRuleId(r.id);
+        QHash<QString,double> tfidf;
 
-        // TF + TF-IDF
-        auto tf = computeTf(tokens);
-        tfidfVectors[it.key()] = computeTfidf(tf);
+        if (!persisted.isEmpty()) {
+            for (const TFIDFVector &v : persisted)
+                tfidf[v.token] = v.tfidf;
+        } else {
+            QStringList tokens = processor->tokenize(r.response);
+            auto tf = computeTf(tokens);
+            tfidf = computeTfidf(tf);
+
+            // Persistir TF-IDF
+            for (auto it = tfidf.begin(); it != tfidf.end(); ++it) {
+                TFIDFVector v{r.id, it.key(), it.value()};
+                vecDao->insert(v);
+            }
+        }
+
+        tfidfVectors[r.trigger] = tfidf;
+
+        // Actualizar DF una sola vez
+        for (const QString &token : tfidf.keys())
+            df[token] += 1;
     }
 }
 
@@ -62,40 +70,46 @@ void TFIDFClassifier::rebuildIfNeeded()
     if (!rulesDao)
         return;
 
-    QList<Rule> activeRules = rulesDao->getActiveRules();
+    const QList<Rule> activeRules = rulesDao->getActiveRules();
     int currentVersion = activeRules.size();
-
     if (currentVersion == rulesVersion)
-        return; // No hay cambios
+        return; // Sin cambios
 
     rulesVersion = currentVersion;
+    clear();
 
-    // Reconstruir TF-IDF mínimo necesario
-    tfidfVectors.clear();
-    df.clear();
-    documents.clear();
-    totalDocs = activeRules.size();
+    totalDocs = currentVersion;
     if (totalDocs == 0) return;
 
-    documents.reserve(activeRules.size());
-    for (const Rule& r : std::as_const(activeRules))
+    for (const Rule &r : activeRules) {
         documents[r.trigger] = r.response;
 
-    // DF y TF-IDF en un solo bucle
-    for (auto it = documents.begin(); it != documents.end(); ++it) {
-        QStringList tokens = processor->tokenize(it.value());
-        QSet<QString> unique(tokens.begin(), tokens.end());
-        for (const QString &w : unique)
-            df[w] += 1;
+        const QList<TFIDFVector> persisted = vecDao->getByRuleId(r.id);
+        QHash<QString,double> tfidf;
 
-        auto tf = computeTf(tokens);
-        tfidfVectors[it.key()] = computeTfidf(tf);
+        if (!persisted.isEmpty()) {
+            for (const TFIDFVector &v : persisted)
+                tfidf[v.token] = v.tfidf;
+        } else {
+            QStringList tokens = processor->tokenize(r.response);
+            auto tf = computeTf(tokens);
+            tfidf = computeTfidf(tf);
+
+            // Guardar en DB
+            for (auto it = tfidf.begin(); it != tfidf.end(); ++it)
+                vecDao->insert({r.id, it.key(), it.value()});
+        }
+
+        tfidfVectors[r.trigger] = tfidf;
+
+        for (const QString &token : tfidf.keys())
+            df[token] += 1;
     }
 }
+
 QString TFIDFClassifier::classify(const QString &query) const
 {
-    if (!processor || documents.isEmpty())
-        return QString();
+    if (!processor || documents.isEmpty()) return {};
 
     auto qTokens = processor->tokenize(query);
     auto qtf = computeTf(qTokens);
@@ -111,76 +125,59 @@ QString TFIDFClassifier::classify(const QString &query) const
             bestId = it.key();
         }
     }
-
     return bestId;
 }
 
-QVector<QPair<QString, double>> TFIDFClassifier::topN(const QString &query, int n) const
+QVector<QPair<QString,double>> TFIDFClassifier::topN(const QString &query, int n) const
 {
-    QVector<QPair<QString, double>> ranked;
-
-    if (!processor || documents.isEmpty())
-        return ranked;
+    QVector<QPair<QString,double>> ranked;
+    if (!processor || documents.isEmpty()) return ranked;
 
     auto qTokens = processor->tokenize(query);
     auto qtf = computeTf(qTokens);
     auto qtfidf = computeTfidf(qtf);
 
-    for (auto it = tfidfVectors.begin(); it != tfidfVectors.end(); ++it) {
-        double sim = cosineSim(qtfidf, it.value());
-        ranked.append({it.key(), sim});
-    }
+    for (auto it = tfidfVectors.begin(); it != tfidfVectors.end(); ++it)
+        ranked.append({it.key(), cosineSim(qtfidf, it.value())});
 
     std::sort(ranked.begin(), ranked.end(),
-              [](const QPair<QString,double> &a, const QPair<QString,double> &b){ return a.second > b.second; });
+              [](const auto &a, const auto &b){ return a.second > b.second; });
 
-    if (ranked.size() > n)
-        ranked.resize(n);
-
+    if (ranked.size() > n) ranked.resize(n);
     return ranked;
 }
 
-QHash<QString, double> TFIDFClassifier::computeTf(const QStringList &tokens) const
+QHash<QString,double> TFIDFClassifier::computeTf(const QStringList &tokens) const
 {
-    QHash<QString, double> tf;
+    QHash<QString,double> tf;
     for (const QString &t : tokens) tf[t] += 1.0;
-
     double total = tokens.size();
-    for (auto it = tf.begin(); it != tf.end(); ++it)
-        it.value() /= total;
-
+    if (total == 0) return tf;
+    for (auto it = tf.begin(); it != tf.end(); ++it) it.value() /= total;
     return tf;
 }
 
-QHash<QString, double> TFIDFClassifier::computeTfidf(const QHash<QString, double> &tf) const
+QHash<QString,double> TFIDFClassifier::computeTfidf(const QHash<QString,double> &tf) const
 {
-    QHash<QString, double> result;
-
+    QHash<QString,double> result;
     for (auto it = tf.begin(); it != tf.end(); ++it) {
-        const QString &word = it.key();
-        double tfVal = it.value();
-        double docFreq = df.value(word, 1);
+        double docFreq = df.value(it.key(), 1);
         double idf = qLn((double(totalDocs) + 1.0) / (docFreq + 1.0)) + 1.0;
-        result[word] = tfVal * idf;
+        result[it.key()] = it.value() * idf;
     }
-
     return result;
 }
 
-double TFIDFClassifier::cosineSim(const QHash<QString, double> &v1,
-                                  const QHash<QString, double> &v2) const
+double TFIDFClassifier::cosineSim(const QHash<QString,double> &v1, const QHash<QString,double> &v2) const
 {
-    double dot = 0.0, mag1 = 0.0, mag2 = 0.0;
-
+    double dot = 0, mag1 = 0, mag2 = 0;
     for (auto it = v1.begin(); it != v1.end(); ++it) {
         mag1 += it.value() * it.value();
-        if (v2.contains(it.key()))
-            dot += it.value() * v2[it.key()];
+        if (v2.contains(it.key())) dot += it.value() * v2[it.key()];
     }
-
     for (auto it = v2.begin(); it != v2.end(); ++it)
         mag2 += it.value() * it.value();
 
     double denom = qSqrt(mag1) * qSqrt(mag2);
-    return denom == 0.0 ? 0.0 : dot / denom;
+    return denom == 0 ? 0 : dot / denom;
 }

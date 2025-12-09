@@ -2,30 +2,35 @@
 #define RULEENGINE_H
 
 #include <QString>
-#include <QStringList>
 #include <QVector>
+#include "rule.h"  // Struct Rule ya definido
 
 class TextProcessor;
 class KeywordDetector;
-
+class RulesDAO;
+//busca encontrar triggers o palabras claves de rules para asi reaccionar
 class RuleEngine
 {
 public:
-    RuleEngine(TextProcessor *processor, KeywordDetector *detector);
+    explicit RuleEngine(TextProcessor *processor,
+                        KeywordDetector *detector,
+                        RulesDAO *dao);
 
-    void addRule(const QString &intentId, const QStringList &keywords);
+    // Cargar reglas activas desde DB
+    void loadRules();
 
-    QString match(const QString &texto) const;   // Regla encontrada o ""
+    // Agregar regla manualmente (opcional)
+    void addRule(const Rule &rule);
+
+    // Match: devuelve trigger de la regla encontrada o ""
+    QString match(const QString &texto) const;
 
 private:
-    struct Rule {
-        QString intentId;
-        QStringList keywords;
-    };
-
     TextProcessor *processor;
     KeywordDetector *detector;
-    QVector<Rule> rules;
+    RulesDAO *rulesDao;
+
+    QVector<Rule> rules; // todas las reglas cargadas
 };
 
 #endif // RULEENGINE_H

@@ -12,11 +12,8 @@ public:
     explicit TFIDFVectorDAO(QSqlDatabase& db)
         : BaseEntityDAO<TFIDFVector>(T, db)
     {}
-
-    /* FUNCIONES ÚTILES */
     QList<TFIDFVector> getByRuleId(int ruleId) const;
     bool removeByRuleId(int ruleId) const;
-
 private:
     TFIDFVector fromQuery(const QSqlQuery& q) const override;
     void bindInsert(QSqlQuery& q, const TFIDFVector& v) const override;

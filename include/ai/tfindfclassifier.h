@@ -7,14 +7,15 @@
 #include <QVector>
 #include <QHash>
 #include <QPair>
-
+//carga, guarda, y crea los pesos de las rules con ruledao y tfindao
 class TextProcessor;
 class RulesDAO; // forward declaration
+class TFIDFVectorDAO;
 
 class TFIDFClassifier
 {
 public:
-    explicit TFIDFClassifier(TextProcessor *processor, RulesDAO* dao);
+    explicit TFIDFClassifier(TextProcessor *processor, RulesDAO* rules,TFIDFVectorDAO* vector);
 
     // Cargar documentos manualmente (opcional)
     void addDocument(const QString &id, const QString &texto);
@@ -35,7 +36,7 @@ private:
 
     TextProcessor *processor;
     RulesDAO* rulesDao; // Puntero al DAO, no ownership
-
+    TFIDFVectorDAO* vecDao;
     // Base documentos: id → trigger
     QHash<QString, QString> documents;
 
