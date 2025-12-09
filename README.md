@@ -25,3 +25,16 @@ De acuerdo con la LGPL v3:
 - Las bibliotecas de Qt se enlazan dinámicamente con esta aplicación.  
 - Los usuarios pueden reemplazar o actualizar las bibliotecas Qt por versiones compatibles.  
 - No se han modificado las bibliotecas Qt originales.
+
+#video para instalar qtcreator en windows
+https://www.youtube.com/watch?v=x9XeCq9tOI0
+#como inicializar proyecto
+1. abra qt creator
+2. eliga abrir proyecto
+3. abra CMakeLists.txt
+4. elija el kit desktop o parecido y la casilla debug
+5. dele a ejecutar y espera que se construya.
+6. la primera vez el db estara vacio, debe llevar la copia DataBase_ChatBot.db de recursos a la siguiente ruta
+-linux: .local/share/ChatBot/DataBase_ChatBot.db
+-windox: C:\Users\<Usuario>\AppData\Local\ChatBot\DataBase_ChatBot.db
+7. ya deberia fucionar en caso contrario contacteme.

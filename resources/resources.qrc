@@ -8,5 +8,6 @@
         <file>database/rules.sql</file>
         <file>database/keywords.sql</file>
         <file>database/tags_platforms_genres.sql</file>
+        <file>database/DataBase_ChatBot.db</file>
     </qresource>
 </RCC>
