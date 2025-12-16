@@ -1,4 +1,5 @@
-PRAGMA foreign_keys = ON;
+pragma foreign_keys = on
+;
 
 CREATE TABLE IF NOT EXISTS genres (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -134,3 +135,4 @@ CREATE TABLE IF NOT EXISTS logs (
 );
 
 CREATE INDEX IF NOT EXISTS idx_logs_level ON logs(level);
+
